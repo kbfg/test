@@ -3,325 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jay's English Hub</title>
+    <title>Jay's Word Vault Pro</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* Jay를 위한 세련된 디자인 */
+        /* Revolut-style Clean & Bold Design */
         :root {
-            --primary: #2C3E50;
-            --accent: #E74C3C; 
-            --bg: #F0F2F5;
+            --bg: #F2F4F8;
             --card-bg: #FFFFFF;
+            --text-main: #191C1F;
+            --text-sub: #8B959E;
+            --blue: #0075EB; 
+            --accent: #FF00BF;
+            --green-bg: #E8F5E9; --green-text: #2E7D32;
+            --red-bg: #FFEBEE; --red-text: #C62828;
+            --purple-bg: #F3E5F5; --purple-text: #7B1FA2;
         }
+
         body {
             margin: 0;
             background-color: var(--bg);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            height: 100vh;
             overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* 상단 카테고리 탭 (스크롤 가능하게 수정) */
-        .tabs-container {
-            width: 100%;
-            background: white;
-            padding: 10px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .tabs {
+        header {
+            padding: 15px 25px;
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 0 15px;
-            scrollbar-width: none; /* 스크롤바 숨김 */
+            justify-content: space-between;
+            align-items: center;
         }
-        .tabs::-webkit-scrollbar { display: none; }
-        
-        .tab-btn {
-            border: none;
-            background: #f1f3f5;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-            white-space: nowrap; /* 줄바꿈 방지 */
-            transition: 0.2s;
-            font-size: 14px;
-        }
-        .tab-btn.active {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2);
+        .brand { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; }
+        .counter { 
+            font-size: 13px; font-weight: 700; color: white; 
+            background: var(--text-main); padding: 6px 14px; border-radius: 20px; 
         }
 
-        /* 메인 카드 영역 */
-        .container {
+        .viewport {
             flex: 1;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 88%;
-            max-width: 400px;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 30px;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             position: relative;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .card:active { transform: scale(0.98); }
-        
-        .category-label {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 12px;
-            background: #eee;
-            padding: 4px 10px;
-            border-radius: 10px;
-            color: #555;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .english {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
-            line-height: 1.4;
-            margin-bottom: 25px;
-            word-break: keep-all;
-        }
-        .korean {
-            font-size: 16px;
-            color: var(--accent);
-            font-weight: 500;
-            display: none; 
-            margin-top: 20px;
-            border-top: 1px dashed #ddd;
-            padding-top: 15px;
-            width: 100%;
+            padding: 20px;
         }
 
-        /* 컨트롤 버튼 */
-        .controls {
+        .card {
+            width: 100%;
+            height: 100%;
+            max-width: 380px;
+            max-height: 620px;
+            background: var(--card-bg);
+            border-radius: 28px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            padding: 30px;
+            box-sizing: border-box;
             display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            justify-content: center;
+            flex-direction: column;
+            position: absolute;
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
+            overflow-y: auto;
+            scrollbar-width: none;
         }
-        .circle-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
+        .card::-webkit-scrollbar { display: none; }
+
+        /* Sentence Area with Audio */
+        .sentence-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .sentence {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.3;
+            color: var(--text-main);
+            letter-spacing: -0.8px;
+        }
+        .highlight {
+            color: var(--blue);
+            background: rgba(0, 117, 235, 0.08);
+            padding: 2px 6px; border-radius: 6px;
+        }
+        .audio-btn {
+            background: #F0F2F5;
             border: none;
-            font-size: 22px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-size: 20px;
+            color: var(--blue);
             transition: 0.2s;
-            background: white;
         }
-        .btn-speak { color: #3498DB; border: 2px solid #3498DB; }
-        .btn-speak:active { background: #3498DB; color: white; }
-        
-        .btn-next { background: var(--primary); color: white; }
-        .btn-next:active { background: #1a252f; }
-        
-        .btn-shuffle { color: #F1C40F; border: 2px solid #F1C40F; }
-        .btn-shuffle.active { background: #F1C40F; color: white; }
+        .audio-btn:active { transform: scale(0.9); background: #E1E4E8; }
 
-        .guide { margin-top: 20px; font-size: 13px; color: #aaa; }
+        /* Quiz Section */
+        .quiz-box { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .quiz-label { font-size: 12px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        
+        .option {
+            padding: 18px;
+            border: 2px solid #F5F7FA;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: white;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .option:active { transform: scale(0.98); }
+        .option.correct { border-color: var(--blue); background: #F0F7FF; color: var(--blue); }
+        .option.wrong { border-color: #FFCDD2; background: #FFEBEE; color: #C62828; }
+
+        /* Details Section */
+        .details {
+            display: none;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px dashed #EEE;
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .tag-block { margin-bottom: 20px; }
+        .tag-title { font-size: 11px; font-weight: 800; color: var(--text-sub); margin-bottom: 8px; display: block; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; }
+        .t-syn { background: var(--green-bg); color: var(--green-text); }
+        .t-ant { background: var(--red-bg); color: var(--red-text); }
+        .t-nuance { background: var(--purple-bg); color: var(--purple-text); width: 100%; line-height: 1.5; font-size: 15px; }
+
+        .next-hint {
+            position: absolute; bottom: 30px; width: 100%; text-align: center;
+            font-size: 14px; color: #BBB; font-weight: 600; opacity: 0; transition: 0.3s;
+            pointer-events: none;
+        }
+        
+        .empty-state { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+        .empty-emoji { font-size: 60px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="tabs-container">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="setCategory('all')">All</button>
-            <button class="tab-btn" onclick="setCategory('soccer')">Soccer ⚽️</button>
-            <button class="tab-btn" onclick="setCategory('bike')">Cycling 🚴</button>
-            <button class="tab-btn" onclick="setCategory('hockey')">Hockey 🏒</button>
-            <button class="tab-btn" onclick="setCategory('game')">Game & Pop 🎮</button>
-            <button class="tab-btn" onclick="setCategory('life')">My Life 🇨🇦</button>
-        </div>
-    </div>
+    <header>
+        <div class="brand">Jay's Vault</div>
+        <div class="counter" id="progress">1 / 50</div>
+    </header>
 
-    <div class="container">
-        <div class="card" onclick="toggleAnswer()">
-            <div id="catLabel" class="category-label">Welcome</div>
-            <div id="englishText" class="english">Hey Jay! Ready to level up your English?</div>
-            <div id="koreanText" class="korean">준비됐어? 터치해서 정답 확인!</div>
-        </div>
-
-        <div class="controls">
-            <button class="circle-btn btn-shuffle" onclick="toggleShuffle()">🔀</button>
-            <button class="circle-btn btn-speak" onclick="speakText()">🔊</button>
-            <button class="circle-btn btn-next" onclick="nextCard()">➡️</button>
-        </div>
-        <p class="guide" id="progressText">Let's start!</p>
-    </div>
+    <div class="viewport" id="cardArea"></div>
+    <div class="next-hint" id="hint">Swipe Left ➡️</div>
 
     <script>
-        // ==========================================
-        // ✏️ Jay 맞춤형 고퀄리티 데이터 (약 30개)
-        // ==========================================
-        const allData = [
-            // [SOCCER] - 전술, 상황 묘사, 손흥민
-            { cat: 'soccer', en: "Sonny's curling shot was absolutely world-class.", ko: "손흥민의 감아차기 슛은 정말 월드클래스였어." },
-            { cat: 'soccer', en: "The defense crumbled under pressure in the second half.", ko: "후반전에 압박을 받자 수비가 무너졌어." },
-            { cat: 'soccer', en: "He has incredible positioning inside the box.", ko: "그는 페널티 박스 안에서 위치 선정이 엄청나." },
-            { cat: 'soccer', en: "That counter-attack strategy was flawless.", ko: "그 역습 전략은 정말 완벽했어." },
-            { cat: 'soccer', en: "Did you see that nutmeg? It was totally humiliating!", ko: "방금 알까기 봤어? 진짜 굴욕적이더라!" },
-            { cat: 'soccer', en: "I think the referee made a controversial call.", ko: "심판 판정이 좀 논란의 여지가 있었던 것 같아." },
+        // =================================================================
+        // 📚 VOCABULARY DATA (US Grade 5-6 Tier 2 & Idioms)
+        // 공신력 있는 데이터 기반 (Common Core, Scholastic Word List)
+        // =================================================================
+        const vocabList = [
+            // -----------------------------------------------------
+            // 1. Academic Vocabulary (미국 학교 수업 필수 어휘)
+            // -----------------------------------------------------
+            {
+                s: "We need to **analyze** the problem carefully.",
+                t: "analyze",
+                m: "To study something closely",
+                o: ["To guess wildly", "To study closely", "To ignore"],
+                syn: ["Examine", "Inspect", "Investigate"],
+                ant: ["Ignore", "Neglect"],
+                n: "대충 보는 게 아니라, 셜록 홈즈처럼 현미경으로 뜯어보는 느낌."
+            },
+            {
+                s: "Can you **elaborate** on your idea?",
+                t: "elaborate",
+                m: "To explain in greater detail",
+                o: ["To stop talking", "To explain in detail", "To simplify"],
+                syn: ["Expand", "Clarify", "Flesh out"],
+                ant: ["Summarize", "Abbreviate"],
+                n: "너무 짧게 말했을 때 '좀 더 자세히(살을 붙여서) 말해봐'라고 할 때 씀."
+            },
+            {
+                s: "The huge statue was truly **colossal**.",
+                t: "colossal",
+                m: "Extremely large",
+                o: ["Very small", "Extremely large", "Colorful"],
+                syn: ["Massive", "Gigantic", "Enormous"],
+                ant: ["Tiny", "Miniature", "Minuscule"],
+                n: "그냥 큰(Big) 정도가 아니라, '거대한' 건담이나 빌딩을 볼 때 쓰는 말."
+            },
+            {
+                s: "It is **crucial** that you wear a helmet.",
+                t: "crucial",
+                m: "Extremely important",
+                o: ["Optional", "Extremely important", "Boring"],
+                syn: ["Vital", "Essential", "Critical"],
+                ant: ["Insignificant", "Optional"],
+                n: "이거 안 하면 큰일 나는 것. '결정적으로 중요한' 상황."
+            },
+            {
+                s: "The story is purely **fictional**.",
+                t: "fictional",
+                m: "Not real; made up",
+                o: ["Based on facts", "Not real", "Scientific"],
+                syn: ["Imaginary", "Fabricated"],
+                ant: ["Real", "Factual", "Non-fiction"],
+                n: "해리포터처럼 작가가 지어낸 이야기. (반대말: Non-fiction)"
+            },
+            {
+                s: "Please **specify** which color you want.",
+                t: "specify",
+                m: "To identify clearly and definitely",
+                o: ["To guess", "To identify clearly", "To mix up"],
+                syn: ["Define", "Designate", "Pinpoint"],
+                ant: ["Generalize"],
+                n: "애매하게 '그거' 하지 말고, '빨간색 아이폰 15'라고 딱 집어 말하는 것."
+            },
+            {
+                s: "He tried to **manipulate** the controller.",
+                t: "manipulate",
+                m: "To handle or control skilledly",
+                o: ["To break", "To control skillfully", "To look at"],
+                syn: ["Operate", "Maneuver", "Influence"],
+                ant: ["Leave alone"],
+                n: "손으로 기계를 잘 다루거나, 사람의 마음을 내 맘대로 조종할 때도 씀."
+            },
+            {
+                s: "The heavy rain was **continuous** all day.",
+                t: "continuous",
+                m: "Going on without stopping",
+                o: ["Stopping often", "Without stopping", "Very fast"],
+                syn: ["Uninterrupted", "Constant", "Ceaseless"],
+                ant: ["Intermittent", "Occasional"],
+                n: "끊기지 않고 쭉 이어지는 것. (유튜브 로딩 없이 쭉 볼 때처럼)"
+            },
+            {
+                s: "I am **optimistic** about winning the game.",
+                t: "optimistic",
+                m: "Hopeful and confident about the future",
+                o: ["Sad and depressed", "Hopeful/Confident", "Angry"],
+                syn: ["Positive", "Cheerful"],
+                ant: ["Pessimistic", "Negative"],
+                n: "무조건 잘 될 거라고 믿는 긍정적인 마인드. (반대말: Pessimistic 염세적인)"
+            },
+            {
+                s: "This strategy is **equivalent** to cheating.",
+                t: "equivalent",
+                m: "Equal in value or amount",
+                o: ["Different", "Equal", "Better"],
+                syn: ["Same", "Identical", "Comparable"],
+                ant: ["Different", "Unequal"],
+                n: "가치는 다르지만 결과적으로는 '쌤쌤(Same)'이라는 뜻."
+            },
 
-            // [CYCLING] - 장비, 기술, 물리적 원리
-            { cat: 'bike', en: "Aerodynamics matter more than weight on flat roads.", ko: "평지에서는 무게보다 공기역학이 더 중요해." },
-            { cat: 'bike', en: "You need to shift gears smoothly before hitting the climb.", ko: "오르막 시작하기 전에 기어를 부드럽게 바꿔야 해." },
-            { cat: 'bike', en: "Carbon fiber frames absorb road vibration better.", ko: "카본 프레임이 노면 진동을 더 잘 흡수해." },
-            { cat: 'bike', en: "Drafting behind the leader saves so much energy.", ko: "선두 뒤에 붙어서(피빠는 것) 가면 에너지가 엄청 절약돼." },
-            { cat: 'bike', en: "Check your cadence! Keep it around 90 RPM.", ko: "케이던스(페달 회전수) 체크해! 90 정도로 유지해봐." },
-            { cat: 'bike', en: "I need to calibrate my power meter.", ko: "나 파워미터 0점 조절(보정) 좀 해야 해." },
-
-            // [HOCKEY] - 스피드, 규칙, NHL
-            { cat: 'hockey', en: "The goalie made a massive save on that breakaway.", ko: "골리가 그 단독 찬스(브레이크어웨이)를 엄청나게 막아냈어." },
-            { cat: 'hockey', en: "Keep your head up when you stickhandle.", ko: "퍽을 다룰 때는 고개를 들고 있어야지." },
-            { cat: 'hockey', en: "Checking is part of the game, but that was a penalty.", ko: "몸싸움(체킹)도 경기의 일부지만, 방금 건 반칙이야." },
-            { cat: 'hockey', en: "He scored a hat-trick in the third period!", ko: "3피리어드에 해트트릭을 기록했어!" },
-            { cat: 'hockey', en: "The ice surface looks a bit rough today.", ko: "오늘 빙질이 좀 거칠어 보이네." },
-
-            // [GAME & POP] - 마인크래프트, 롤블록스, 팝송, 유튜브
-            { cat: 'game', en: "The graphics in the new update are next-level.", ko: "이번 새 업데이트 그래픽 진짜 차원이 달라." },
-            { cat: 'game', en: "I need to craft a diamond pickaxe first.", ko: "일단 다이아몬드 곡괭이부터 만들어야 해." },
-            { cat: 'game', en: "Wait, the server is lagging so bad.", ko: "잠깐만, 서버 렉이 너무 심해." },
-            { cat: 'game', en: "The lyrics of this song are full of metaphors.", ko: "이 노래 가사는 은유적 표현으로 가득 차 있어." },
-            { cat: 'game', en: "That YouTuber has over a million subscribers.", ko: "저 유튜버 구독자가 백만 명이 넘더라." },
-
-            // [LIFE & CANADA] - 유학 기억, 의견 말하기, 학교
-            { cat: 'life', en: "I honestly miss the snowy recess times in Canada.", ko: "솔직히 캐나다에서 눈 올 때 쉬는 시간(Recess)이 그리워." },
-            { cat: 'life', en: "It’s not just about grades, it’s about creativity.", ko: "단순히 성적이 중요한 게 아니라, 창의성이 중요한 거야." },
-            { cat: 'life', en: "Can we call it a day? I'm exhausted.", ko: "오늘 이만 마칠까? 나 완전 지쳤어." },
-            { cat: 'life', en: "I'd rather play sports than study math right now.", ko: "지금은 수학 공부하느니 차라리 운동을 하고 싶어." },
-            { cat: 'life', en: "What’s the Wi-Fi password here?", ko: "여기 와이파이 비밀번호가 뭐예요?" },
-            { cat: 'life', en: "Let's hang out at the mall after school.", ko: "방과 후에 쇼핑몰 가서 놀자." }
+            // -----------------------------------------------------
+            // 2. Real-life Idioms (미국 초등 고학년~중등 필수 숙어)
+            // -----------------------------------------------------
+            {
+                s: "Wow, you really **hit the nail on the head**!",
+                t: "hit the nail on the head",
+                m: "To describe exactly what is causing a situation",
+                o: ["To build something", "To be exactly right", "To hurt your finger"],
+                syn: ["Spot on", "Get it right"],
+                ant: ["Miss the point"],
+                n: "정곡을 찌르다! 핵심을 완벽하게 맞췄을 때 쓰는 최고의 칭찬."
+            },
+            {
+                s: "Don't worry, **break a leg** out there!",
+                t: "break a leg",
+                m: "Good luck (usually for performance)",
+                o: ["Get hurt", "Good luck", "Run fast"],
+                syn: ["Good luck", "Best wishes"],
+                ant: ["Bad luck"],
+                n: "공연이나 시합 나가는 친구한테 '행운을 빌어!'라고 할 때 씀. (다리 부러지란 뜻 아님!)"
+            },
+            {
+                s: "Stop checking your phone **once in a blue moon**.",
+                t: "once in a blue moon",
+                m: "Very rarely",
+                o: ["Every day", "Very rarely", "At night"],
+                syn: ["Rarely", "Hardly ever"],
+                ant: ["Frequently", "Often"],
+                n: "파란 달은 거의 안 뜨지? '가뭄에 콩 나듯' 아주 가끔 일어나는 일."
+            },
+            {
+                s: "I decided to **bite the bullet** and tell the truth.",
+                t: "bite the bullet",
+                m: "To endure a painful situation bravely",
+                o: ["To eat metal", "To endure bravely", "To shoot"],
+                syn: ["Face the music", "Tough it out"],
+                ant: ["Avoid", "Chicken out"],
+                n: "피하고 싶지만 꾹 참고 용기 내서 하기 싫은 일을 할 때."
+            },
+            {
+                s: "He let the **cat out of the bag** about the party.",
+                t: "cat out of the bag",
+                m: "To reveal a secret by mistake",
+                o: ["To lose a pet", "To reveal a secret", "To buy a bag"],
+                syn: ["Spill the beans", "Reveal"],
+                ant: ["Keep a secret"],
+                n: "비밀을 실수로 누설해버렸을 때. (가방 안에 몰래 넣은 고양이가 튀어나옴)"
+            },
+            {
+                s: "That computer costs **an arm and a leg**.",
+                t: "an arm and a leg",
+                m: "To be very expensive",
+                o: ["Very cheap", "Very expensive", "Body parts"],
+                syn: ["Cost a fortune", "Pricey"],
+                ant: ["Dirt cheap", "A bargain"],
+                n: "내 팔다리를 내줘야 할 정도로 엄청나게 비싸다는 뜻."
+            },
+            {
+                s: "I'm feeling a bit **under the weather** today.",
+                t: "under the weather",
+                m: "Feeling slightly sick",
+                o: ["Feeling happy", "Feeling sick", "Looking at rain"],
+                syn: ["Unwell", "Sick"],
+                ant: ["Fit as a fiddle"],
+                n: "심한 병은 아니고, 몸살 기운이나 컨디션이 별로일 때."
+            },
+            {
+                s: "Let's **cut to the chase** and talk about the price.",
+                t: "cut to the chase",
+                m: "To get to the point without wasting time",
+                o: ["Run away", "Get to the point", "Watch a movie"],
+                syn: ["Get to the point"],
+                ant: ["Beat around the bush"],
+                n: "영화에서 지루한 부분 자르고 추격전(Chase)으로 바로 가자! 즉, 본론만 말해."
+            },
+            {
+                s: "It's not **rocket science**, you can do it.",
+                t: "rocket science",
+                m: "Something very difficult to understand",
+                o: ["Easy thing", "Very difficult thing", "Space travel"],
+                syn: ["Complicated"],
+                ant: ["Piece of cake"],
+                n: "로켓 과학만큼 어렵지 않아. 즉, '너도 충분히 이해할 수 있어, 쫄지 마'라는 뜻."
+            },
+            {
+                s: "Just **hang in there**, vacation is coming soon.",
+                t: "hang in there",
+                m: "Don't give up",
+                o: ["Let go", "Don't give up", "Climb a tree"],
+                syn: ["Persist", "Keep going"],
+                ant: ["Give up", "Quit"],
+                n: "힘들어도 조금만 더 버텨! (절벽에 매달려 있는 사람 응원하는 느낌)"
+            }
         ];
 
-        // ==========================================
-        // ⚙️ 앱 작동 로직
-        // ==========================================
-        let currentList = [...allData];
-        let currentIndex = 0;
-        let isShuffle = false;
+        // =================================================================
+        // ⚙️ SYSTEM LOGIC (TTS, Quiz, Swipe)
+        // =================================================================
+        let idx = 0;
+        const cardArea = document.getElementById('cardArea');
+        const progress = document.getElementById('progress');
+        const hint = document.getElementById('hint');
+        
+        function render() {
+            if (idx >= vocabList.length) {
+                cardArea.innerHTML = `<div class='empty-state'><div class='empty-emoji'>🎉</div><h3>All Done for today!</h3><p style='color:#888'>Great job, Jay!</p></div>`;
+                hint.style.opacity = 0;
+                return;
+            }
 
-        const enEl = document.getElementById('englishText');
-        const koEl = document.getElementById('koreanText');
-        const catEl = document.getElementById('catLabel');
-        const progressEl = document.getElementById('progressText');
-
-        function showCard() {
-            if (currentList.length === 0) return;
-            if (currentIndex >= currentList.length) currentIndex = 0;
-
-            const data = currentList[currentIndex];
-            enEl.textContent = data.en;
-            koEl.textContent = data.ko;
+            const item = vocabList[idx];
             
-            // 카테고리 라벨
-            catEl.textContent = data.cat.toUpperCase();
+            // Highlight Target Word
+            const sentenceHTML = item.s.replace(`**${item.t}**`, `<span class='highlight'>${item.t}</span>`);
             
-            // 배경색 살짝 변경 (카테고리별 느낌)
-            let color = '#555';
-            if(data.cat === 'soccer') color = '#27ae60'; // Green
-            if(data.cat === 'bike') color = '#e67e22'; // Orange
-            if(data.cat === 'hockey') color = '#2980b9'; // Blue
-            if(data.cat === 'game') color = '#9b59b6'; // Purple
-            catEl.style.color = color;
-            catEl.style.border = `1px solid ${color}`;
-            catEl.style.background = '#fff';
+            // Randomize Options
+            let options = item.o.map(opt => ({ txt: opt, isCor: opt === item.m }));
+            options.sort(() => Math.random() - 0.5);
 
-            koEl.style.display = 'none';
-            updateProgress();
+            const el = document.createElement('div');
+            el.className = 'card';
+            el.innerHTML = `
+                <div class="sentence-row">
+                    <div class="sentence">${sentenceHTML}</div>
+                    <button class="audio-btn" onclick="speak('${item.s.replace(/'/g, "\\'")}')">🔊</button>
+                </div>
+                
+                <div class="quiz-box" id="quizBox">
+                    <div class="quiz-label">What does "${item.t}" mean?</div>
+                    ${options.map(o => `<div class="option" onclick="check(this, ${o.isCor})">${o.txt}</div>`).join('')}
+                </div>
+
+                <div class="details" id="details">
+                    <div class="tag-block">
+                        <span class="tag-title">JAY'S NOTE (NUANCE)</span>
+                        <div class="tag t-nuance">${item.n}</div>
+                    </div>
+                    <div class="tag-block">
+                        <span class="tag-title">SYNONYMS</span>
+                        <div class="tags">
+                            ${item.syn.map(s => `<div class="tag t-syn">${s}</div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="tag-block">
+                        <span class="tag-title">ANTONYMS</span>
+                        <div class="tags">
+                            ${item.ant.map(a => `<div class="tag t-ant">${a}</div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            cardArea.innerHTML = '';
+            cardArea.appendChild(el);
+            progress.textContent = `${idx + 1} / ${vocabList.length}`;
+            hint.style.opacity = 0;
         }
 
-        function toggleAnswer() {
-            koEl.style.display = (koEl.style.display === 'none') ? 'block' : 'none';
+        // 🔊 TTS Function
+        window.speak = (text) => {
+            // Remove markdown asterisks for speech
+            const cleanText = text.replace(/\*\*/g, "");
+            
+            window.speechSynthesis.cancel(); // Stop previous
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9; // Slightly slower for clarity
+            utterance.pitch = 1;
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.check = (btn, isCorrect) => {
+            const allBtns = document.querySelectorAll('.option');
+            allBtns.forEach(b => b.onclick = null); // Prevent double click
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                showDetails();
+            } else {
+                btn.classList.add('wrong');
+                allBtns.forEach(b => {
+                    if (b.textContent === vocabList[idx].m) b.classList.add('correct');
+                });
+                showDetails();
+            }
+        };
+
+        function showDetails() {
+            const details = document.getElementById('details');
+            details.style.display = 'block';
+            
+            // Auto-scroll to details
+            setTimeout(() => {
+                const card = document.querySelector('.card');
+                card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
+                hint.style.opacity = 1;
+            }, 100);
+        }
+
+        // Swipe Logic
+        let startX = 0;
+        let endX = 0;
+
+        document.addEventListener('touchstart', e => {
+            startX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            endX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const details = document.getElementById('details');
+            // Only allow swipe if details are shown (Quiz finished)
+            if (!details || details.style.display === 'none') return;
+
+            if (startX - endX > 50) { // Swipe Left
+                nextCard();
+            }
         }
 
         function nextCard() {
-            if (isShuffle) {
-                let nextIndex = Math.floor(Math.random() * currentList.length);
-                // 같은 카드 연속 방지
-                while(currentList.length > 1 && nextIndex === currentIndex) {
-                    nextIndex = Math.floor(Math.random() * currentList.length);
-                }
-                currentIndex = nextIndex;
-            } else {
-                currentIndex++;
-            }
-            showCard();
+            const card = document.querySelector('.card');
+            card.style.transform = 'translateX(-120%) rotate(-5deg)';
+            card.style.opacity = '0';
+            
+            setTimeout(() => {
+                idx++;
+                render();
+            }, 300);
         }
 
-        function speakText() {
-            // 말하고 있을 때 또 누르면 취소
-            if(window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-                return;
-            }
-            const text = enEl.textContent;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US'; // 미국식 발음
-            utterance.rate = 0.85; // Jay가 듣기 좋게 약간 침착한 속도
-            utterance.pitch = 1;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function setCategory(cat) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            if (cat === 'all') {
-                currentList = [...allData];
-            } else {
-                currentList = allData.filter(item => item.cat === cat);
-            }
-            currentIndex = 0;
-            showCard();
-        }
-
-        function toggleShuffle() {
-            isShuffle = !isShuffle;
-            const btn = document.querySelector('.btn-shuffle');
-            if (isShuffle) {
-                btn.classList.add('active');
-                btn.style.background = '#F1C40F';
-                btn.style.color = 'white';
-            } else {
-                btn.classList.remove('active');
-                btn.style.background = 'white';
-                btn.style.color = '#F1C40F';
-            }
-        }
-
-        function updateProgress() {
-            progressEl.textContent = `${currentIndex + 1} / ${currentList.length}`;
-        }
-
-        // 초기 시작
-        showCard();
+        // Init
+        render();
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
