@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jay's Mega Vault 160</title>
+    <title>Jay's Fast Vault</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* Revolut-style Modern UI */
+        /* Lite Version: Clean, Fast, Typography-focused */
         :root {
-            --bg: #F2F4F8;
+            --bg: #F0F2F5;
             --card-bg: #FFFFFF;
-            --text-main: #191C1F;
-            --text-sub: #8B959E;
-            --blue: #3E64FF;
-            --accent: #FF3E6C;
-            --green-bg: #E3FCEF; --green-text: #006644;
-            --red-bg: #FFEBE6; --red-text: #BF2600;
-            --purple-bg: #EAE6FF; --purple-text: #403294;
+            --text-main: #111;
+            --text-sub: #666;
+            --blue: #2979FF; /* Vivid Blue */
+            --accent: #FF1744; /* Vivid Red */
+            --green-bg: #E8F5E9; --green-text: #1B5E20;
+            --red-bg: #FFEBEE; --red-text: #B71C1C;
+            --purple-bg: #F3E5F5; --purple-text: #4A148C;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0; background-color: var(--bg);
@@ -26,72 +28,76 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .brand { font-size: 19px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; }
-        .counter { font-size: 12px; font-weight: 700; color: white; background: var(--text-main); padding: 5px 12px; border-radius: 20px; }
+        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .brand { font-size: 20px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; }
+        .counter { font-size: 13px; font-weight: 700; color: white; background: var(--text-main); padding: 5px 12px; border-radius: 20px; }
 
         .viewport {
             flex: 1; display: flex; justify-content: center; align-items: center; position: relative; padding: 20px;
         }
 
         .card {
-            width: 100%; height: 100%; max-width: 380px; max-height: 720px;
-            background: var(--card-bg); border-radius: 28px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            width: 100%; height: 100%; max-width: 380px; max-height: 650px;
+            background: var(--card-bg); border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             display: flex; flex-direction: column;
-            position: absolute; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s;
-            overflow-y: auto; scrollbar-width: none;
+            position: absolute; 
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+            
+            /* 스크롤 핵심 설정 */
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+            padding: 30px 25px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
+        
+        /* 스크롤바 숨김 */
         .card::-webkit-scrollbar { display: none; }
 
-        /* IMAGE AREA */
-        .image-container {
-            width: 100%; height: 180px; flex-shrink: 0;
-            background: #F8F9FA; border-radius: 28px 28px 0 0; overflow: hidden; position: relative;
-        }
-        .word-image { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
-        .img-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; color: #AAA; font-weight: 600; }
-
-        /* CONTENT AREA */
-        .content-box { padding: 25px; display: flex; flex-direction: column; gap: 20px; flex: 1; }
-        .word-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .target-word { font-size: 30px; font-weight: 900; color: var(--text-main); line-height: 1; margin-bottom: 8px; text-transform: capitalize; }
-        .phonetic { font-family: 'Times New Roman', serif; font-size: 17px; color: var(--text-sub); background: #F5F5F5; padding: 4px 10px; border-radius: 8px; }
+        /* CONTENT STYLES */
+        .word-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        
+        .word-info { display: flex; flex-direction: column; gap: 8px; }
+        .target-word { font-size: 34px; font-weight: 900; color: var(--text-main); line-height: 1; text-transform: capitalize; letter-spacing: -1px; }
+        .phonetic { font-family: 'Times New Roman', serif; font-size: 18px; color: var(--text-sub); display: inline-block; background: #F5F5F5; padding: 4px 8px; border-radius: 6px; align-self: flex-start;}
         
         .audio-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: var(--blue); border: none;
-            color: white; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(62, 100, 255, 0.3); transition: 0.2s; flex-shrink: 0;
+            width: 48px; height: 48px; border-radius: 50%; background: var(--blue); border: none;
+            color: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(41, 121, 255, 0.3); transition: 0.2s; flex-shrink: 0;
         }
-        .audio-btn:active { transform: scale(0.9); }
+        .audio-btn:active { transform: scale(0.92); }
 
-        .sentence { font-size: 19px; font-weight: 700; line-height: 1.4; color: #333; }
-        .highlight { color: var(--blue); background: rgba(62, 100, 255, 0.1); padding: 0 4px; border-radius: 4px; }
+        .sentence-box { margin-bottom: 30px; }
+        .sentence { font-size: 21px; font-weight: 700; line-height: 1.5; color: #222; }
+        .highlight { color: var(--blue); background: rgba(41, 121, 255, 0.1); padding: 0 4px; border-radius: 4px; }
 
-        /* QUIZ */
-        .quiz-area { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+        /* QUIZ AREA */
+        .quiz-area { display: flex; flex-direction: column; gap: 12px; margin-top: auto; padding-bottom: 20px; }
+        .quiz-label { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        
         .option {
-            padding: 15px; border: 2px solid #F0F2F5; border-radius: 16px;
-            font-size: 15px; font-weight: 600; color: var(--text-main); background: white;
+            padding: 18px; border: 2px solid #F2F4F8; border-radius: 16px;
+            font-size: 16px; font-weight: 600; color: var(--text-main); background: white;
             cursor: pointer; transition: 0.1s; text-align: left;
         }
-        .option:active { transform: scale(0.98); }
-        .option.correct { border-color: var(--blue); background: #EFF4FF; color: var(--blue); }
+        .option:active { transform: scale(0.98); background: #FAFAFA; }
+        .option.correct { border-color: var(--blue); background: #F0F7FF; color: var(--blue); }
         .option.wrong { border-color: #FFCDD2; background: #FFF5F5; color: #C62828; }
 
-        /* DETAILS */
-        .details { display: none; padding-top: 20px; border-top: 2px dashed #EEE; animation: slideUp 0.5s ease-out; margin-bottom: 40px;}
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* DETAILS (Hidden initially) */
+        .details { display: none; margin-top: 10px; padding-top: 25px; border-top: 2px dashed #EEE; animation: fadeIn 0.3s ease-out; margin-bottom: 40px;}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .extra-context { background: #F9FAFB; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .ctx-label { font-size: 11px; font-weight: 800; color: var(--text-sub); display: block; margin-bottom: 5px; text-transform: uppercase; }
-        .ctx-text { font-size: 15px; color: #444; line-height: 1.4; font-weight: 500; }
+        .extra-context { background: #F8F9FA; padding: 18px; border-radius: 14px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .ctx-label { font-size: 11px; font-weight: 800; color: var(--text-sub); display: block; margin-bottom: 6px; text-transform: uppercase; }
+        .ctx-text { font-size: 16px; color: #333; line-height: 1.5; font-weight: 500; font-style: italic; }
 
-        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
-        .tag { padding: 6px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .tag { padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; }
         .t-syn { background: var(--green-bg); color: var(--green-text); }
         .t-ant { background: var(--red-bg); color: var(--red-text); }
-        .t-nuance { background: var(--purple-bg); color: var(--purple-text); width: 100%; line-height: 1.4; }
+        .t-nuance { background: var(--purple-bg); color: var(--purple-text); width: 100%; line-height: 1.5; }
 
         .next-hint { position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 14px; color: #BBB; opacity: 0; pointer-events: none; transition: 0.3s; }
     </style>
@@ -99,8 +105,8 @@
 <body>
 
     <header>
-        <div class="brand">Jay's Vault 💎</div>
-        <div class="counter" id="progress">Loading...</div>
+        <div class="brand">Jay's Vault ⚡</div>
+        <div class="counter" id="progress">1 / 160</div>
     </header>
 
     <div class="viewport" id="cardArea"></div>
@@ -108,11 +114,10 @@
 
     <script>
         // =================================================================
-        // 📚 JAY'S MASSIVE WORD INVENTORY (160+ Items)
-        // Grade 5 Tier 2, Idioms, Sports, Tech - All Randomized
+        // 📚 JAY'S MASSIVE DATA (160+ Words) - Text Only Optimized
         // =================================================================
         const rawData = [
-            // --- [SECTION 1: Essential Idioms & Phrasal Verbs] ---
+            // [SECTION 1: Essential Idioms & Phrasal Verbs]
             {t:"piece of cake", p:"/piːs əv keɪk/", m:"Very easy", s:"The math test was a **piece of cake**.", e:"Fixing this flat tire is a piece of cake for me.", o:["Hard","Very easy","Delicious"], syn:["Breeze","Walk in the park"], n:"식은 죽 먹기 (누워서 떡 먹기)"},
             {t:"call it a day", p:"/kɔːl ɪt ə deɪ/", m:"Stop working", s:"We're tired, let's **call it a day**.", e:"The coach decided to call it a day after 3 hours of practice.", o:["Start","Stop working","Call friend"], syn:["Wrap up","Finish"], n:"오늘은 여기까지! (퇴근)"},
             {t:"under the weather", p:"/ˈʌn.də ðə ˈweð.ə/", m:"Feeling sick", s:"I won't go to school, I'm **under the weather**.", e:"He missed the game because he was feeling a bit under the weather.", o:["Happy","Feeling sick","Rainy"], syn:["Unwell","Ill"], n:"컨디션이 좀 안 좋은 (몸살 기운)"},
@@ -139,7 +144,7 @@
             {t:"look forward to", p:"/lʊk ˈfɔː.wəd tuː/", m:"Be excited about future", s:"I **look forward to** the weekend.", e:"We look forward to seeing you in Canada.", o:["Look back","Be excited about","Watch"], syn:["Anticipate"], n:"엄청 기대하다 (학수고대)"},
             {t:"run out of", p:"/rʌn aʊt əv/", m:"Use all of something", s:"We **ran out of** milk.", e:"My controller ran out of battery.", o:["Run away","Use all of","Buy"], syn:["Deplete"], n:"~이 다 떨어지다, 바닥나다"},
 
-            // --- [SECTION 2: Grade 5-6 Tier 2 Academic Words] ---
+            // [SECTION 2: Grade 5-6 Tier 2 Academic Words]
             {t:"analyze", p:"/ˈæn.əl.aɪz/", m:"Study closely", s:"We need to **analyze** the data.", e:"Coach analyzed the opponent's tactics.", o:["Guess","Study closely","Ignore"], syn:["Examine","Inspect"], n:"현미경으로 보듯 꼼꼼히 뜯어보다"},
             {t:"elaborate", p:"/iˈlæb.ə.reɪt/", m:"Explain in detail", s:"Please **elaborate** on your idea.", e:"He elaborated on his plan to build the LEGO base.", o:["Stop talking","Explain detail","Simplify"], syn:["Expand","Clarify"], n:"살을 붙여서 자세히 설명하다"},
             {t:"inevitable", p:"/ɪˈnev.ə.tə.bəl/", m:"Certain to happen", s:"Defeat was **inevitable**.", e:"It is inevitable that technology will change.", o:["Unlikely","Certain","Avoidable"], syn:["Unavoidable","Destined"], n:"피할 수 없는 운명 같은"},
@@ -184,7 +189,7 @@
             {t:"verdict", p:"/ˈvɜː.dɪkt/", m:"Final decision", s:"The jury's **verdict**.", e:"What's your verdict on the new movie? Good or bad?", o:["Start","Final decision","Question"], syn:["Judgment"], n:"최종 판결이나 결론"},
             {t:"wary", p:"/ˈweə.ri/", m:"Careful/Cautious", s:"Be **wary** of strangers.", e:"The cat was wary of the new dog.", o:["Careless","Careful","Happy"], syn:["Cautious"], n:"경계하고 조심하는"},
 
-            // --- [SECTION 3: Sports & Action (Soccer, Hockey, Bike)] ---
+            // [SECTION 3: Sports & Action]
             {t:"agile", p:"/ˈædʒ.aɪl/", m:"Moving quickly/easily", s:"The striker is very **agile**.", e:"He is agile enough to dodge the defenders.", o:["Slow","Quick/Easy","Clumsy"], syn:["Nimble"], n:"동작이 날렵하고 민첩한"},
             {t:"stamina", p:"/ˈstæm.ɪ.nə/", m:"Endurance/Energy", s:"You need **stamina** for soccer.", e:"Running up the hill requires huge stamina.", o:["Speed","Endurance","Sleep"], syn:["Resilience"], n:"지치지 않고 오래 버티는 체력"},
             {t:"momentum", p:"/məˈmen.təm/", m:"Force of movement", s:"The team gained **momentum**.", e:"The bike gained momentum going downhill.", o:["Stop","Force/Speed","Weight"], syn:["Impetus"], n:"점점 빨라지는 탄력이나 기세"},
@@ -208,23 +213,23 @@
             {t:"breakaway", p:"/ˈbreɪk.ə.weɪ/", m:"Sudden attack move", s:"A dangerous **breakaway**.", e:"The hockey player had a breakaway and scored.", o:["Defense","Sudden attack","Timeout"], syn:["Escape"], n:"단독 찬스 (수비를 뚫고 혼자 나감)"},
             {t:"slap shot", p:"/ˈslæp.ʃɒt/", m:"Powerful hockey shot", s:"A booming **slap shot**.", e:"His slap shot is the fastest in the league.", o:["Slow pass","Powerful shot","Skating"], syn:["Hard shot"], n:"(하키) 스틱을 휘둘러 강하게 때리는 슛"},
 
-            // --- [SECTION 4: Tech, Gaming & Modern Life] ---
+            // [SECTION 4: Tech, Gaming & Modern Life]
             {t:"glitch", p:"/ɡlɪtʃ/", m:"Small technical problem", s:"The game has a **glitch**.", e:"My phone screen had a weird glitch.", o:["Feature","Bug/Problem","Button"], syn:["Bug","Error"], n:"일시적인 기계 오류나 버그"},
             {t:"lag", p:"/læɡ/", m:"Delay in response", s:"This server has bad **lag**.", e:"I missed the shot because of the lag.", o:["Speed","Delay","Sound"], syn:["Latency"], n:"(게임 등에서) 반응 속도가 느린 현상"},
             {t:"virtual", p:"/ˈvɜː.tʃu.əl/", m:"Computer-generated (Not real)", s:"A **virtual** reality headset.", e:"We had a virtual meeting online.", o:["Real","Digital/Fake","Old"], syn:["Simulated"], n:"가상의 (컴퓨터 속의)"},
             {t:"device", p:"/dɪˈvaɪs/", m:"Electronic machine/tool", s:"Charge your **device**.", e:"Tablets are useful learning devices.", o:["Toy","Electronic tool","Food"], syn:["Gadget"], n:"전자기기나 장치"},
             {t:"innovative", p:"/ˈɪn.ə.və.tɪv/", m:"New and creative", s:"An **innovative** design.", e:"Steve Jobs was an innovative leader.", o:["Old","Creative/New","Boring"], syn:["Inventive"], n:"혁신적이고 기발한"},
             {t:"obsolete", p:"/ˈɒb.səl.iːt/", m:"Old and not used anymore", s:"Floppy disks are **obsolete**.", e:"That old phone is now obsolete tech.", o:["New","Outdated","Popular"], syn:["Outdated"], n:"너무 구식이라 이제 안 쓰는"},
-            {t:"compatible", p:"/kəmˈpæt.ə.bəl/", m:"Working well together", s:"Is this software **compatible** with Mac?", e:"These two devices are not compatible.", o:["Broken","Working together","New"], syn:["Matching"], n:"호환되는 (서로 잘 맞는)"},
+            {t:"compatible", p:"/kəmˈpæt.ə.bəl/", m:"Working well together", s:"Is this software **compatible**?", e:"These two devices are not compatible.", o:["Broken","Working together","New"], syn:["Matching"], n:"호환되는 (서로 잘 맞는)"},
             {t:"resolution", p:"/ˌrez.əˈluː.ʃən/", m:"Screen clarity/Quality", s:"High **resolution** screen.", e:"The game runs at 4K resolution.", o:["Sound","Screen quality","Size"], syn:["Clarity"], n:"(화면의) 해상도, 선명도"},
             {t:"bandwidth", p:"/ˈbænd.wɪtθ/", m:"Data transfer capacity", s:"Low **bandwidth** causes lag.", e:"Streaming video uses a lot of bandwidth.", o:["Screen size","Data capacity","Battery"], syn:["Capacity"], n:"대역폭 (인터넷 데이터 처리 능력)"},
             {t:"authentic", p:"/ɔːˈθen.tɪk/", m:"Real/Genuine", s:"**Authentic** Italian pizza.", e:"Is this jersey authentic or fake?", o:["Fake","Real","Cheap"], syn:["Genuine"], n:"진짜의, 진품의"},
             {t:"alternative", p:"/ɒlˈtɜː.nə.tɪv/", m:"Another choice", s:"Find an **alternative** route.", e:"Is there a healthy alternative to soda?", o:["Same choice","Another choice","No choice"], syn:["Option"], n:"대안, 다른 선택지"},
             {t:"essential", p:"/ɪˈsen.ʃəl/", m:"Completely necessary", s:"Water is **essential** for life.", e:"Good gear is essential for camping.", o:["Optional","Necessary","Useless"], syn:["Vital"], n:"없어서는 안 될 필수적인"},
-            {t:"relevant", p:"/ˈrel.ə.vənt/", m:"Related to the topic", s:"Is that **relevant** to our discussion?", e:"Keep your comments relevant.", o:["Unrelated","Related","Funny"], syn:["Pertinent"], n:"관련이 있는, 적절한"},
+            {t:"relevant", p:"/ˈrel.ə.vənt/", m:"Related to the topic", s:"Is that **relevant**?", e:"Keep your comments relevant to the topic.", o:["Unrelated","Related","Funny"], syn:["Pertinent"], n:"관련이 있는, 적절한"},
             {t:"imply", p:"/ɪmˈplaɪ/", m:"Suggest without saying", s:"Are you **implying** I'm lazy?", e:"His silence implied agreement.", o:["Say directly","Suggest indirectly","Shout"], syn:["Hint"], n:"넌지시 암시하다, 비추다"},
             {t:"perspective", p:"/pəˈspek.tɪv/", m:"Point of view", s:"From my **perspective**...", e:"Try to see things from his perspective.", o:["Glasses","Point of view","Height"], syn:["Viewpoint"], n:"관점, 시각"},
-            {t:"assume", p:"/əˈsjuːm/", m:"Accept as true without proof", s:"Don't **assume** you know everything.", e:"I assumed you were coming to the party.", o:["Know","Guess/Believe","Deny"], syn:["Presume"], n:"(증거 없이) 당연히 그럴 거라 생각하다"},
+            {t:"assume", p:"/əˈsjuːm/", m:"Accept as true without proof", s:"Don't **assume** anything.", e:"I assumed you were coming to the party.", o:["Know","Guess/Believe","Deny"], syn:["Presume"], n:"(증거 없이) 당연히 그럴 거라 생각하다"},
             {t:"contribute", p:"/kənˈtrɪb.juːt/", m:"Give something to help", s:"**Contribute** to the team.", e:"Everyone should contribute their ideas.", o:["Take","Give/Help","Stop"], syn:["Donate"], n:"기여하다, 이바지하다"},
             {t:"emphasize", p:"/ˈem.fə.saɪz/", m:"Give importance to", s:"He **emphasized** the rule.", e:"The teacher emphasized studying for the test.", o:["Ignore","Highlight/Stress","Whisper"], syn:["Stress"], n:"강조하다"},
             {t:"generate", p:"/ˈdʒen.ə.reɪt/", m:"Produce or create", s:"Solar panels **generate** power.", e:"This AI can generate images.", o:["Destroy","Create","Buy"], syn:["Produce"], n:"만들어내다, 발생시키다"},
@@ -237,10 +242,10 @@
         ];
 
         // =================================================================
-        // ⚙️ SYSTEM LOGIC (Same features, more data)
+        // ⚙️ SYSTEM LOGIC (Fast & Light)
         // =================================================================
         let vocabList = [...rawData];
-        vocabList.sort(() => Math.random() - 0.5); // Start shuffled
+        vocabList.sort(() => Math.random() - 0.5);
 
         let idx = 0;
         const cardArea = document.getElementById('cardArea');
@@ -249,15 +254,12 @@
 
         function render() {
             if (idx >= vocabList.length) {
-                vocabList.sort(() => Math.random() - 0.5); // Reshuffle on finish
+                vocabList.sort(() => Math.random() - 0.5);
                 idx = 0;
             }
 
             const item = vocabList[idx];
-            // AI Image Generation (Dynamic Prompting)
-            const promptContext = (idx < 25) ? "idiom visualization" : (idx < 135) ? "minimalist 3d object" : "futuristic 3d icon";
-            const imgUrl = `https://image.pollinations.ai/prompt/cute 3d render of ${item.t}, ${promptContext}, isometric view, white background?width=400&height=250&nologo=true&seed=${Math.random()}`;
-
+            
             const sentenceHTML = item.s.replace(`**${item.t}**`, `<span class='highlight'>${item.t}</span>`);
             
             let options = item.o.map(opt => ({ txt: opt, isCor: opt === item.m }));
@@ -265,41 +267,38 @@
 
             const el = document.createElement('div');
             el.className = 'card';
+            // No Image Container -> Just Content
             el.innerHTML = `
-                <div class="image-container">
-                    <div class="img-loader">Generating AI Image...</div>
-                    <img src="${imgUrl}" class="word-image" alt="${item.t}" onload="this.style.opacity=1" onerror="this.src='https://via.placeholder.com/400x250?text=${item.t}'">
+                <div class="word-header">
+                    <div class="word-info">
+                        <div class="target-word">${item.t}</div>
+                        <span class="phonetic">${item.p}</span>
+                    </div>
+                    <button class="audio-btn" onclick="speak('${item.t.replace(/'/g, "\\'")}')">🔊</button>
                 </div>
 
-                <div class="content-box">
-                    <div class="word-header">
-                        <div>
-                            <div class="target-word">${item.t}</div>
-                            <span class="phonetic">${item.p}</span>
-                        </div>
-                        <button class="audio-btn" onclick="speak('${item.t.replace(/'/g, "\\'")}')">🔊</button>
-                    </div>
-
+                <div class="sentence-box">
                     <div class="sentence">${sentenceHTML}</div>
+                </div>
+                
+                <div class="quiz-area">
+                    <div class="quiz-label">What does it mean?</div>
+                    ${options.map(o => `<div class="option" onclick="check(this, ${o.isCor})">${o.txt}</div>`).join('')}
+                </div>
+
+                <div class="details" id="details">
+                    <div class="extra-context">
+                        <span class="ctx-label">ANOTHER EXAMPLE</span>
+                        <div class="ctx-text">"${item.e}"</div>
+                    </div>
                     
-                    <div class="quiz-area">
-                        ${options.map(o => `<div class="option" onclick="check(this, ${o.isCor})">${o.txt}</div>`).join('')}
+                    <div class="tag-block">
+                        <span class="ctx-label">NUANCE</span>
+                        <div class="tag t-nuance">${item.n}</div>
                     </div>
 
-                    <div class="details" id="details">
-                        <div class="extra-context">
-                            <span class="ctx-label">ANOTHER EXAMPLE</span>
-                            <div class="ctx-text">"${item.e}"</div>
-                        </div>
-                        
-                        <div class="tag-block">
-                            <span class="ctx-label">NUANCE</span>
-                            <div class="tag t-nuance">${item.n}</div>
-                        </div>
-
-                        <div class="tags">
-                            ${item.syn.map(s => `<div class="tag t-syn">${s}</div>`).join('')}
-                        </div>
+                    <div class="tags">
+                        ${item.syn.map(s => `<div class="tag t-syn">${s}</div>`).join('')}
                     </div>
                 </div>
             `;
@@ -333,13 +332,17 @@
             const details = document.getElementById('details');
             details.style.display = 'block';
             
-            // Read full sentence on correct answer
+            // Read full sentence
             const sentenceText = vocabList[idx].s.replace(/\*\*/g, "");
             setTimeout(() => speak(sentenceText), 200);
 
+            // Smooth Scroll to bottom
             setTimeout(() => {
                 const card = document.querySelector('.card');
-                card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
+                // Check if card needs scrolling
+                if(card.scrollHeight > card.clientHeight) {
+                     card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
+                }
                 hint.style.opacity = 1;
             }, 100);
         };
@@ -349,11 +352,12 @@
         document.addEventListener('touchend', e => {
             endX = e.changedTouches[0].screenX;
             const details = document.getElementById('details');
+            // Swipe works only if details are shown
             if (details && details.style.display === 'block' && startX - endX > 50) {
                 const card = document.querySelector('.card');
-                card.style.transform = 'translateX(-120%) rotate(-5deg)';
+                card.style.transform = 'translateX(-120%) rotate(-3deg)';
                 card.style.opacity = '0';
-                setTimeout(() => { idx++; render(); }, 300);
+                setTimeout(() => { idx++; render(); }, 250);
             }
         });
 
