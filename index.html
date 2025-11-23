@@ -143,921 +143,89 @@
        
         .empty-state { text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
         .empty-emoji { font-size: 60px; margin-bottom: 20px; }
+        /* Loading Spinner 추가 */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: var(--blue);
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="brand">Jay's Vault</div>
-        <div class="counter" id="progress">1 / 50</div>
+        <div class="counter" id="progress">1 / ∞</div> <!-- 실시간이니 무한! -->
     </header>
-    <div class="viewport" id="cardArea"></div>
+    <div class="viewport" id="cardArea"><div class="loading">Loading cool word... 🚀</div></div>
     <div class="next-hint" id="hint">Swipe Left ➡️</div>
     <script>
         // =================================================================
-        // 📚 VOCABULARY DATA (US Grade 5-6 Tier 2 & Idioms)
-        // 공신력 있는 데이터 기반 (Common Core, Scholastic Word List)
-        // =================================================================
-        const vocabList = [
-            // Original samples
-            {
-                s: "We need to **analyze** the problem carefully.",
-                t: "analyze",
-                m: "To study something closely",
-                o: ["To guess wildly", "To study closely", "To ignore"],
-                syn: ["Examine", "Inspect", "Investigate"],
-                ant: ["Ignore", "Neglect"],
-                n: "대충 보는 게 아니라, 셜록 홈즈처럼 현미경으로 뜯어보는 느낌."
-            },
-            {
-                s: "Can you **elaborate** on your idea?",
-                t: "elaborate",
-                m: "To explain in greater detail",
-                o: ["To stop talking", "To explain in detail", "To simplify"],
-                syn: ["Expand", "Clarify", "Flesh out"],
-                ant: ["Summarize", "Abbreviate"],
-                n: "너무 짧게 말했을 때 '좀 더 자세히(살을 붙여서) 말해봐'라고 할 때 씀."
-            },
-            {
-                s: "The huge statue was truly **colossal**.",
-                t: "colossal",
-                m: "Extremely large",
-                o: ["Very small", "Extremely large", "Colorful"],
-                syn: ["Massive", "Gigantic", "Enormous"],
-                ant: ["Tiny", "Miniature", "Minuscule"],
-                n: "그냥 큰(Big) 정도가 아니라, '거대한' 건담이나 빌딩을 볼 때 쓰는 말."
-            },
-            {
-                s: "It is **crucial** that you wear a helmet.",
-                t: "crucial",
-                m: "Extremely important",
-                o: ["Optional", "Extremely important", "Boring"],
-                syn: ["Vital", "Essential", "Critical"],
-                ant: ["Insignificant", "Optional"],
-                n: "이거 안 하면 큰일 나는 것. '결정적으로 중요한' 상황."
-            },
-            {
-                s: "The story is purely **fictional**.",
-                t: "fictional",
-                m: "Not real; made up",
-                o: ["Based on facts", "Not real", "Scientific"],
-                syn: ["Imaginary", "Fabricated"],
-                ant: ["Real", "Factual", "Non-fiction"],
-                n: "해리포터처럼 작가가 지어낸 이야기. (반대말: Non-fiction)"
-            },
-            {
-                s: "Please **specify** which color you want.",
-                t: "specify",
-                m: "To identify clearly and definitely",
-                o: ["To guess", "To identify clearly", "To mix up"],
-                syn: ["Define", "Designate", "Pinpoint"],
-                ant: ["Generalize"],
-                n: "애매하게 '그거' 하지 말고, '빨간색 아이폰 15'라고 딱 집어 말하는 것."
-            },
-            {
-                s: "He tried to **manipulate** the controller.",
-                t: "manipulate",
-                m: "To handle or control skilledly",
-                o: ["To break", "To control skillfully", "To look at"],
-                syn: ["Operate", "Maneuver", "Influence"],
-                ant: ["Leave alone"],
-                n: "손으로 기계를 잘 다루거나, 사람의 마음을 내 맘대로 조종할 때도 씀."
-            },
-            {
-                s: "The heavy rain was **continuous** all day.",
-                t: "continuous",
-                m: "Going on without stopping",
-                o: ["Stopping often", "Without stopping", "Very fast"],
-                syn: ["Uninterrupted", "Constant", "Ceaseless"],
-                ant: ["Intermittent", "Occasional"],
-                n: "끊기지 않고 쭉 이어지는 것. (유튜브 로딩 없이 쭉 볼 때처럼)"
-            },
-            {
-                s: "I am **optimistic** about winning the game.",
-                t: "optimistic",
-                m: "Hopeful and confident about the future",
-                o: ["Sad and depressed", "Hopeful/Confident", "Angry"],
-                syn: ["Positive", "Cheerful"],
-                ant: ["Pessimistic", "Negative"],
-                n: "무조건 잘 될 거라고 믿는 긍정적인 마인드. (반대말: Pessimistic 염세적인)"
-            },
-            {
-                s: "This strategy is **equivalent** to cheating.",
-                t: "equivalent",
-                m: "Equal in value or amount",
-                o: ["Different", "Equal", "Better"],
-                syn: ["Same", "Identical", "Comparable"],
-                ant: ["Different", "Unequal"],
-                n: "가치는 다르지만 결과적으로는 '쌤쌤(Same)'이라는 뜻."
-            },
-            {
-                s: "Wow, you really **hit the nail on the head**!",
-                t: "hit the nail on the head",
-                m: "To describe exactly what is causing a situation",
-                o: ["To build something", "To be exactly right", "To hurt your finger"],
-                syn: ["Spot on", "Get it right"],
-                ant: ["Miss the point"],
-                n: "정곡을 찌르다! 핵심을 완벽하게 맞췄을 때 쓰는 최고의 칭찬."
-            },
-            {
-                s: "Don't worry, **break a leg** out there!",
-                t: "break a leg",
-                m: "Good luck (usually for performance)",
-                o: ["Get hurt", "Good luck", "Run fast"],
-                syn: ["Good luck", "Best wishes"],
-                ant: ["Bad luck"],
-                n: "공연이나 시합 나가는 친구한테 '행운을 빌어!'라고 할 때 씀. (다리 부러지란 뜻 아님!)"
-            },
-            {
-                s: "Stop checking your phone **once in a blue moon**.",
-                t: "once in a blue moon",
-                m: "Very rarely",
-                o: ["Every day", "Very rarely", "At night"],
-                syn: ["Rarely", "Hardly ever"],
-                ant: ["Frequently", "Often"],
-                n: "파란 달은 거의 안 뜨지? '가뭄에 콩 나듯' 아주 가끔 일어나는 일."
-            },
-            {
-                s: "I decided to **bite the bullet** and tell the truth.",
-                t: "bite the bullet",
-                m: "To endure a painful situation bravely",
-                o: ["To eat metal", "To endure bravely", "To shoot"],
-                syn: ["Face the music", "Tough it out"],
-                ant: ["Avoid", "Chicken out"],
-                n: "피하고 싶지만 꾹 참고 용기 내서 하기 싫은 일을 할 때."
-            },
-            {
-                s: "He let the **cat out of the bag** about the party.",
-                t: "cat out of the bag",
-                m: "To reveal a secret by mistake",
-                o: ["To lose a pet", "To reveal a secret", "To buy a bag"],
-                syn: ["Spill the beans", "Reveal"],
-                ant: ["Keep a secret"],
-                n: "비밀을 실수로 누설해버렸을 때. (가방 안에 몰래 넣은 고양이가 튀어나옴)"
-            },
-            {
-                s: "That computer costs **an arm and a leg**.",
-                t: "an arm and a leg",
-                m: "To be very expensive",
-                o: ["Very cheap", "Very expensive", "Body parts"],
-                syn: ["Cost a fortune", "Pricey"],
-                ant: ["Dirt cheap", "A bargain"],
-                n: "내 팔다리를 내줘야 할 정도로 엄청나게 비싸다는 뜻."
-            },
-            {
-                s: "I'm feeling a bit **under the weather** today.",
-                t: "under the weather",
-                m: "Feeling slightly sick",
-                o: ["Feeling happy", "Feeling sick", "Looking at rain"],
-                syn: ["Unwell", "Sick"],
-                ant: ["Fit as a fiddle"],
-                n: "심한 병은 아니고, 몸살 기운이나 컨디션이 별로일 때."
-            },
-            {
-                s: "Let's **cut to the chase** and talk about the price.",
-                t: "cut to the chase",
-                m: "To get to the point without wasting time",
-                o: ["Run away", "Get to the point", "Watch a movie"],
-                syn: ["Get to the point"],
-                ant: ["Beat around the bush"],
-                n: "영화에서 지루한 부분 자르고 추격전(Chase)으로 바로 가자! 즉, 본론만 말해."
-            },
-            {
-                s: "It's not **rocket science**, you can do it.",
-                t: "rocket science",
-                m: "Something very difficult to understand",
-                o: ["Easy thing", "Very difficult thing", "Space travel"],
-                syn: ["Complicated"],
-                ant: ["Piece of cake"],
-                n: "로켓 과학만큼 어렵지 않아. 즉, '너도 충분히 이해할 수 있어, 쫄지 마'라는 뜻."
-            },
-            {
-                s: "Just **hang in there**, vacation is coming soon.",
-                t: "hang in there",
-                m: "Don't give up",
-                o: ["Let go", "Don't give up", "Climb a tree"],
-                syn: ["Persist", "Keep going"],
-                ant: ["Give up", "Quit"],
-                n: "힘들어도 조금만 더 버텨! (절벽에 매달려 있는 사람 응원하는 느낌)"
-            },
-            // Expanded from sources
-            {
-                s: "The children would **giggle** at the funny joke.",
-                t: "giggle",
-                m: "to laugh lightly in a silly way",
-                o: ["cry", "to laugh lightly in a silly way", "shout"],
-                syn: ["chuckle", "snicker"],
-                ant: ["sob"],
-                n: "재미있는 유튜브 영상을 볼 때처럼 웃는 느낌."
-            },
-            {
-                s: "The bird would **appear** suddenly from the tree.",
-                t: "appear",
-                m: "to come into sight",
-                o: ["disappear", "to come into sight", "hide"],
-                syn: ["emerge", "show"],
-                ant: ["vanish"],
-                n: "비디오 게임에서 캐릭터가 갑자기 나타나는 것처럼."
-            },
-            {
-                s: "She is an **artist** who paints beautiful pictures.",
-                t: "artist",
-                m: "a person who creates art",
-                o: ["doctor", "a person who creates art", "chef"],
-                syn: ["painter", "creator"],
-                ant: [],
-                n: "틱톡에서 라이브 드로잉하는 아티스트처럼."
-            },
-            {
-                s: "The leaves **bloom** in the springtime.",
-                t: "bloom",
-                m: "to flower or open up",
-                o: ["wilt", "to flower or open up", "fade"],
-                syn: ["flower", "blossom"],
-                ant: ["wither"],
-                n: "자전거 타러 갈 공원에서 꽃이 피는 것처럼."
-            },
-            {
-                s: "The road was **bumpy** and made the bike shake.",
-                t: "bumpy",
-                m: "uneven or rough",
-                o: ["smooth", "uneven or rough", "flat"],
-                syn: ["rough", "jagged"],
-                ant: ["smooth"],
-                n: "산악 자전거 트레일처럼 울퉁불퉁한 길."
-            },
-            {
-                s: "The dog would **burst** through the door.",
-                t: "burst",
-                m: "to break open suddenly",
-                o: ["close", "to break open suddenly", "seal"],
-                syn: ["explode", "erupt"],
-                ant: ["contain"],
-                n: "스포츠 게임에서 골을 넣고 터지는 느낌."
-            },
-            {
-                s: "The bee would **buzz** around the flower.",
-                t: "buzz",
-                m: "to make a low humming sound",
-                o: ["silence", "to make a low humming sound", "quiet"],
-                syn: ["hum", "vibrate"],
-                ant: ["still"],
-                n: "자연 유튜브 영상에서 벌이 윙윙거리는 소리처럼."
-            },
-            {
-                s: "She would **care** for the little kitten.",
-                t: "care",
-                m: "to look after or protect",
-                o: ["ignore", "to look after or protect", "abandon"],
-                syn: ["tend", "nurture"],
-                ant: ["neglect"],
-                n: "스포츠 전에 자전거를 돌보는 것처럼."
-            },
-            {
-                s: "The teacher would **check** the homework.",
-                t: "check",
-                m: "to examine or inspect",
-                o: ["ignore", "to examine or inspect", "skip"],
-                syn: ["inspect", "verify"],
-                ant: ["overlook"],
-                n: "자전거 타기 전에 타이어를 확인하는 것처럼."
-            },
-            {
-                s: "The air was **chilly** in the winter morning.",
-                t: "chilly",
-                m: "cold and unpleasant",
-                o: ["warm", "cold and unpleasant", "hot"],
-                syn: ["cool", "frigid"],
-                ant: ["warm"],
-                n: "겨울에 자전거 타는 느낌처럼 추운."
-            },
-            {
-                s: "He had a **chore** to clean his room.",
-                t: "chore",
-                m: "a routine task or job",
-                o: ["play", "a routine task or job", "rest"],
-                syn: ["task", "duty"],
-                ant: ["leisure"],
-                n: "스포츠 전에 청소하는 일처럼."
-            },
-            {
-                s: "The **comfort** of the soft bed helped her sleep.",
-                t: "comfort",
-                m: "state of physical ease",
-                o: ["pain", "state of physical ease", "discomfort"],
-                syn: ["coziness", "ease"],
-                ant: ["discomfort"],
-                n: "긴 자전거 타기 후 자전거 시트의 편안함처럼."
-            },
-            {
-                s: "The **community** helped build the park.",
-                t: "community",
-                m: "a group of people living together",
-                o: ["individual", "a group of people living together", "stranger"],
-                syn: ["neighborhood", "group"],
-                ant: ["isolation"],
-                n: "커뮤니티 자전거 라이드 이벤트처럼."
-            },
-            {
-                s: "The **country** has wide open fields.",
-                t: "country",
-                m: "a nation or rural area",
-                o: ["city", "a nation or rural area", "town"],
-                syn: ["nation", "rural"],
-                ant: ["urban"],
-                n: "국가를 횡단하는 자전거 타기처럼."
-            },
-            {
-                s: "The house was **covered** in snow.",
-                t: "covered",
-                m: "hidden or hidden under something",
-                o: ["exposed", "hidden or hidden under something", "bare"],
-                syn: ["hidden", "concealed"],
-                ant: ["uncovered"],
-                n: "자전거 타기 후 진흙으로 뒤덮인 느낌처럼."
-            },
-            {
-                s: "She put the book in the **drawer**.",
-                t: "drawer",
-                m: "a sliding box for storage",
-                o: ["shelf", "a sliding box for storage", "cupboard"],
-                syn: ["compartment", "bin"],
-                ant: [],
-                n: "자전거 수리 도구를 서랍에 저장하는 것처럼."
-            },
-            {
-                s: "The **dusty** old book was on the shelf.",
-                t: "dusty",
-                m: "covered with dust",
-                o: ["clean", "covered with dust", "fresh"],
-                syn: ["grimy", "sooty"],
-                ant: ["clean"],
-                n: "긴 타기 후 먼지 쌓인 자전거처럼."
-            },
-            {
-                s: "The **edge** of the cliff was dangerous.",
-                t: "edge",
-                m: "the outer or lower limit",
-                o: ["center", "the outer or lower limit", "middle"],
-                syn: ["rim", "border"],
-                ant: ["center"],
-                n: "스케이트 파크의 가장자리에서 자전거 타는 것처럼."
-            },
-            {
-                s: "The **farmer** grew crops in the field.",
-                t: "farmer",
-                m: "a person who farms land",
-                o: ["teacher", "a person who farms land", "doctor"],
-                syn: ["agriculturist", "cultivator"],
-                ant: [],
-                n: "트랙터 대신 자전거 타는 농부처럼."
-            },
-            {
-                s: "The firefly glowed in the dark night.",
-                t: "glow",
-                m: "to give off soft light",
-                o: ["dim", "to give off soft light", "darken"],
-                syn: ["shine", "radiate"],
-                ant: ["fade"],
-                n: "밤에 자전거 라이트의 빛처럼."
-            },
-            {
-                s: "She could **fix** the broken toy.",
-                t: "fix",
-                m: "to repair or mend",
-                o: ["break", "to repair or mend", "damage"],
-                syn: ["repair", "mend"],
-                ant: ["ruin"],
-                n: "추락 후 자전거 체인 고치는 것처럼."
-            },
-            {
-                s: "The bird would **flipper** in the water.",
-                t: "flipper",
-                m: "a limb used for swimming",
-                o: ["wing", "a limb used for swimming", "leg"],
-                syn: ["paddle", "fin"],
-                ant: [],
-                n: "유튜브 영상에서 돌핀 플리퍼처럼."
-            },
-            {
-                s: "The **fluffy** cat purred softly.",
-                t: "fluffy",
-                m: "soft and thick",
-                o: ["rough", "soft and thick", "thin"],
-                syn: ["downy", "plush"],
-                ant: ["sleek"],
-                n: "자전거 피크닉에서 푹신한 베개처럼."
-            },
-            {
-                s: "He would **follow** the leader in the game.",
-                t: "follow",
-                m: "to go after or obey",
-                o: ["lead", "to go after or obey", "precede"],
-                syn: ["trail", "obey"],
-                ant: ["guide"],
-                n: "트레일에서 자전거 그룹을 따르는 것처럼."
-            },
-            {
-                s: "The boat sailed on the **pond**.",
-                t: "pond",
-                m: "a small body of water",
-                o: ["ocean", "a small body of water", "river"],
-                syn: ["pool", "lake"],
-                ant: ["sea"],
-                n: "자전거 타면서 근처 연못에 돌 던지기처럼."
-            },
-            {
-                s: "The horse would **gallop** across the field.",
-                t: "gallop",
-                m: "to run at full speed",
-                o: ["walk", "to run at full speed", "stop"],
-                syn: ["run", "dash"],
-                ant: ["trot"],
-                n: "스포츠 비디오에서 말 갤럽처럼."
-            },
-            {
-                s: "The **gentle** breeze blew through the trees.",
-                t: "gentle",
-                m: "kind or soft",
-                o: ["harsh", "kind or soft", "rough"],
-                syn: ["tender", "mild"],
-                ant: ["harsh"],
-                n: "공원에서 자전거 타는 부드러운 산들바람처럼."
-            },
-            {
-                s: "She felt **proud** of her accomplishment.",
-                t: "proud",
-                m: "feeling satisfaction from achievement",
-                o: ["ashamed", "feeling satisfaction from achievement", "humble"],
-                syn: ["elated", "honored"],
-                ant: ["ashamed"],
-                n: "자전거 레이스 이긴 후 자랑스러운 느낌."
-            },
-            {
-                s: "The **young** boy played in the yard.",
-                t: "young",
-                m: "not old or immature",
-                o: ["old", "not old or immature", "aged"],
-                syn: ["youthful", "juvenile"],
-                ant: ["old"],
-                n: "유튜브 챌린지에서 젊은 아이들처럼."
-            },
-            {
-                s: "He felt an **ache** in his leg after running.",
-                t: "ache",
-                m: "a dull pain",
-                o: ["relief", "a dull pain", "comfort"],
-                syn: ["pain", "throb"],
-                ant: ["euphoria"],
-                n: "긴 자전거 타기 후 아픈 느낌."
-            },
-            {
-                s: "The **fancy** dress sparkled in the light.",
-                t: "fancy",
-                m: "elaborate or stylish",
-                o: ["plain", "elaborate or stylish", "simple"],
-                syn: ["ornate", "luxurious"],
-                ant: ["plain"],
-                n: "퍼레이드를 위한 멋진 자전거처럼."
-            },
-            {
-                s: "They had a **problem** to solve together.",
-                t: "problem",
-                m: "a difficult situation",
-                o: ["solution", "a difficult situation", "ease"],
-                syn: ["issue", "difficulty"],
-                ant: ["answer"],
-                n: "스포츠 게임에서 문제 해결처럼."
-            },
-            {
-                s: "She would **adjust** the seat on her bike.",
-                t: "adjust",
-                m: "to change to fit",
-                o: ["fix", "to change to fit", "break"],
-                syn: ["adapt", "modify"],
-                ant: ["maintain"],
-                n: "타기 전에 자전거 조정하는 것처럼."
-            },
-            {
-                s: "The story was **fascinating** and kept her attention.",
-                t: "fascinating",
-                m: "extremely interesting",
-                o: ["boring", "extremely interesting", "dull"],
-                syn: ["captivating", "engrossing"],
-                ant: ["boring"],
-                n: "유튜브 자전거 트릭 비디오처럼 매력적인."
-            },
-            {
-                s: "He made a **promise** to help his friend.",
-                t: "promise",
-                m: "a assurance to do something",
-                o: ["lie", "a assurance to do something", "break"],
-                syn: ["vow", "pledge"],
-                ant: ["betrayal"],
-                n: "스포츠 매치에서 이기겠다고 약속하는 것처럼."
-            },
-            {
-                s: "The alarm would **ring** to wake him up.",
-                t: "alarm",
-                m: "a warning signal",
-                o: ["calm", "a warning signal", "peace"],
-                syn: ["signal", "warning"],
-                ant: ["reassurance"],
-                n: "자전거 레이스 시작을 위한 알람처럼."
-            },
-            {
-                s: "The room was **alone** with no one in it.",
-                t: "alone",
-                m: "by oneself",
-                o: ["crowded", "by oneself", "together"],
-                syn: ["solitary", "unaccompanied"],
-                ant: ["accompanied"],
-                n: "공원에서 혼자 자전거 타는 것처럼."
-            },
-            {
-                s: "The dirty clothes were **filthy** after playing.",
-                t: "filthy",
-                m: "very dirty",
-                o: ["clean", "very dirty", "pure"],
-                syn: ["grimy", "soiled"],
-                ant: ["clean"],
-                n: "자전거 떨어진 후 더러운 무릎처럼."
-            },
-            {
-                s: "She would **flee** from the scary dog.",
-                t: "flee",
-                m: "to run away quickly",
-                o: ["stay", "to run away quickly", "approach"],
-                syn: ["escape", "bolt"],
-                ant: ["remain"],
-                n: "스포츠 추격 게임에서 도망치는 것처럼."
-            },
-            {
-                s: "He would **apologize** for his mistake.",
-                t: "apologize",
-                m: "to express regret",
-                o: ["boast", "to express regret", "deny"],
-                syn: ["sorry", "regret"],
-                ant: ["gloat"],
-                n: "자전거 타다 실수 후 사과하는 것처럼."
-            },
-            // From splashlearn idioms
-            {
-                s: "Solving this puzzle was a **piece of cake**!",
-                t: "piece of cake",
-                m: "super easy",
-                o: ["very hard", "super easy", "average difficulty"],
-                syn: ["a walk in the park", "easy peasy"],
-                ant: ["a tough nut to crack"],
-                n: "재미있는 게임처럼 쉬운 것."
-            },
-            {
-                s: "Let’s work on our science project together. You know what they say, **two heads are better than one**!",
-                t: "two heads are better than one",
-                m: "working with someone improves ideas",
-                o: ["work alone", "working with someone improves ideas", "too many cooks"],
-                syn: ["teamwork makes the dream work", "collaboration is key"],
-                ant: ["going it alone"],
-                n: "친구와 함께 자전거 타는 것처럼 더 재미있어."
-            },
-            {
-                s: "Don’t worry if you don’t get it right the first time. Remember, the **third time’s a charm**!",
-                t: "third time’s a charm",
-                m: "success on the third attempt",
-                o: ["give up", "success on the third attempt", "first try only"],
-                syn: ["try, try again", "persistence pays"],
-                ant: ["give up easily"],
-                n: "스포츠에서 세 번 시도 후 성공하는 느낌."
-            },
-            {
-                s: "I got all the answers correct on the quiz – **ten out of ten**!",
-                t: "ten out of ten",
-                m: "perfect score",
-                o: ["zero", "perfect score", "average"],
-                syn: ["perfect score", "flawless"],
-                ant: ["failed attempt"],
-                n: "유튜브 챌린지에서 만점 받는 것처럼."
-            },
-            {
-                s: "Finding a parking spot on a busy day is like discovering a **four-leaf clover**!",
-                t: "four-leaf clover",
-                m: "very lucky",
-                o: ["unlucky", "very lucky", "normal"],
-                syn: ["lucky charm", "good fortune"],
-                ant: ["bad luck"],
-                n: "자전거 타다 행운의 클로버 찾는 느낌."
-            },
-            {
-                s: "After winning the game, Jane felt like she was **on cloud nine**.",
-                t: "on cloud nine",
-                m: "super happy",
-                o: ["sad", "super happy", "angry"],
-                syn: ["over the moon", "ecstatic"],
-                ant: ["down in the dumps"],
-                n: "자전거 레이스 이긴 후 기분."
-            },
-            {
-                s: "Let’s hurry to the front of the line – it’s **first come, first served** for the best seats!",
-                t: "first come, first served",
-                m: "arriving first gets priority",
-                o: ["last come first", "arriving first gets priority", "random"],
-                syn: ["early bird gets the worm", "first in line"],
-                ant: ["last in line"],
-                n: "스포츠 티켓 사러 먼저 가는 것처럼."
-            },
-            {
-                s: "We can play board games or watch a movie – it’s really **six of one, half a dozen of the other**.",
-                t: "six of one, half a dozen of the other",
-                m: "two options are basically the same",
-                o: ["different", "two options are basically the same", "one is better"],
-                syn: ["much of a muchness", "same difference"],
-                ant: ["completely different"],
-                n: "유튜브나 게임, 똑같이 재미있는 것처럼."
-            },
-            {
-                s: "Tim missed hitting the ball three times in a row – **three strikes and you’re out**, buddy!",
-                t: "three strikes and you’re out",
-                m: "consequences after three failures",
-                o: ["keep trying", "consequences after three failures", "one chance"],
-                syn: ["three chances then consequences", "final warning"],
-                ant: ["endless opportunities"],
-                n: "야구 게임처럼 세 번 실패 후 아웃."
-            },
-            {
-                s: "Let’s not plan the celebration until we’re sure we’ve won – we shouldn’t **count our chickens before they hatch**.",
-                t: "count your chickens before they hatch",
-                m: "don’t plan prematurely",
-                o: ["plan ahead", "don’t plan prematurely", "count everything"],
-                syn: ["don’t count your eggs before they hatch", "avoid premature celebration"],
-                ant: ["plan ahead confidently"],
-                n: "자전거 레이스 이기기 전에 축하하지 마."
-            },
-            {
-                s: "Sarah accidentally let the **cat out of the bag** when she mentioned the surprise party before the big day.",
-                t: "let the cat out of the bag",
-                m: "reveal a secret",
-                o: ["keep secret", "reveal a secret", "buy a cat"],
-                syn: ["spill the beans", "disclose secret"],
-                ant: ["keep a secret"],
-                n: "비밀 파티를 실수로 말해버린 것처럼."
-            },
-            {
-                s: "I know you’re excited about the movie, but **hold your horses** – we need to finish our chores first.",
-                t: "hold your horses",
-                m: "be patient",
-                o: ["hurry", "be patient", "run away"],
-                syn: ["slow your roll", "wait a moment"],
-                ant: ["hurry up"],
-                n: "영화 보기 전에 숙제 먼저 하자."
-            },
-            {
-                s: "From the top of the mountain, we had a **bird’s-eye view** of the entire valley below.",
-                t: "bird’s-eye view",
-                m: "view from above",
-                o: ["ground view", "view from above", "close-up"],
-                syn: ["panoramic view", "overhead perspective"],
-                ant: ["close-up view"],
-                n: "자전거 타다 산 정상에서 보는 뷰처럼."
-            },
-            {
-                s: "When I tried dancing at the ballet class, I felt like a **fish out of water** because I’d never danced before.",
-                t: "fish out of water",
-                m: "uncomfortable in a situation",
-                o: ["comfortable", "uncomfortable in a situation", "swimming"],
-                syn: ["square peg in a round hole", "out of place"],
-                ant: ["in one's element"],
-                n: "발레 클래스에서 처음 춤추는 느낌."
-            },
-            {
-                s: "Grandma is always busy in her garden, just like a **busy as a bee** collecting nectar from flowers.",
-                t: "busy as a bee",
-                m: "working hard",
-                o: ["lazy", "working hard", "resting"],
-                syn: ["as busy as a beaver", "very busy"],
-                ant: ["idle"],
-                n: "정원에서 바쁜 할머니처럼."
-            },
-            {
-                s: "When Tim tried to help in the delicate pottery store, he knocked over a vase – he was like a **bull in a china shop**.",
-                t: "bull in a china shop",
-                m: "clumsy and destructive",
-                o: ["graceful", "clumsy and destructive", "careful"],
-                syn: ["all thumbs", "awkward and careless"],
-                ant: ["graceful"],
-                n: "도자기 가게에서 서투른 느낌."
-            },
-            {
-                s: "We were talking about math, and suddenly Jack started talking about his favorite book – he was discussing a **horse of a different color**.",
-                t: "horse of a different color",
-                m: "completely different topic",
-                o: ["same topic", "completely different topic", "animal"],
-                syn: ["different kettle of fish", "unrelated matter"],
-                ant: ["on the same subject"],
-                n: "수학 이야기하다 갑자기 책 이야기하는 것처럼."
-            },
-            {
-                s: "Lucy figured out the puzzle before anyone else. She’s as **sly as a fox** when it comes to solving tricky problems.",
-                t: "sly as a fox",
-                m: "very clever",
-                o: ["dumb", "very clever", "slow"],
-                syn: ["sharp as a tack", "cunning"],
-                ant: ["foolish"],
-                n: "퍼즐 풀 때 영리한 여우처럼."
-            },
-            {
-                s: "I accidentally dropped my ice cream, but there’s no use **cry over spilled milk**. I’ll just get another one.",
-                t: "cry over spilled milk",
-                m: "don’t worry about past mistakes",
-                o: ["worry", "don’t worry about past mistakes", "spill milk"],
-                syn: ["water under the bridge", "regret past events"],
-                ant: ["dwell on mistakes"],
-                n: "아이스크림 떨어트려도 울지 말고 새로 사자."
-            },
-            {
-                s: "When I asked Lily about my missing toy, I was **barking up the wrong tree** – she didn’t know anything about it.",
-                t: "barking up the wrong tree",
-                m: "mistaken approach",
-                o: ["correct", "mistaken approach", "barking"],
-                syn: ["on the wrong track", "wrong direction"],
-                ant: ["correct path"],
-                n: "잃어버린 장난감 찾다 잘못된 사람 물어보는 것처럼."
-            },
-            {
-                s: "Before the school play, Sarah’s friends told her to **break a leg** to wish her good luck.",
-                t: "break a leg",
-                m: "good luck",
-                o: ["bad luck", "good luck", "break bone"],
-                syn: ["good luck", "wish luck"],
-                ant: ["bad luck"],
-                n: "학교 연극 전에 행운을 빌어."
-            },
-            {
-                s: "I can’t go out to play today – I’m feeling a bit **under the weather**.",
-                t: "under the weather",
-                m: "not feeling well",
-                o: ["feeling great", "not feeling well", "weather"],
-                syn: ["under par", "ill"],
-                ant: ["feeling great"],
-                n: "오늘 놀러 못 가, 몸이 안 좋아."
-            },
-            {
-                s: "It’s getting late, so it’s time to **hit the hay** and go to sleep.",
-                t: "hit the hay",
-                m: "go to bed",
-                o: ["stay up", "go to bed", "hit something"],
-                syn: ["hit the sack", "go to sleep"],
-                ant: ["stay up"],
-                n: "늦었으니 자러 가자."
-            },
-            {
-                s: "When we all agreed on the movie we wanted to watch, we knew we were **on the same page**.",
-                t: "on the same page",
-                m: "in agreement",
-                o: ["disagree", "in agreement", "reading"],
-                syn: ["on one accord", "aligned understanding"],
-                ant: ["at odds"],
-                n: "영화 선택에 모두 동의하는 것처럼."
-            },
-            {
-                s: "Even though he was nervous, Tom decided to **bite the bullet** and ask his teacher about the challenging assignment.",
-                t: "bite the bullet",
-                m: "face difficulty bravely",
-                o: ["avoid", "face difficulty bravely", "bite something"],
-                syn: ["tough it out", "endure hardship"],
-                ant: ["avoid challenge"],
-                n: "어려운 과제에 용기 내서 묻는 것처럼."
-            },
-            {
-                s: "Those fancy shoes may look nice, but they **cost an arm and a leg**!",
-                t: "cost an arm and a leg",
-                m: "very expensive",
-                o: ["cheap", "very expensive", "body parts"],
-                syn: ["pricey", "high price"],
-                ant: ["inexpensive"],
-                n: "팔다리 값만큼 비싼 신발."
-            },
-            {
-                s: "When Sam guessed that I was feeling hungry, he **hit the nail on the head** – I hadn’t eaten all day!",
-                t: "hit the nail on the head",
-                m: "exactly right",
-                o: ["wrong", "exactly right", "hit nail"],
-                syn: ["right on the money", "precisely correct"],
-                ant: ["completely wrong"],
-                n: "배고픈 거 정확히 맞춘 것처럼."
-            },
-            {
-                s: "Emily’s little brother is quite a **piece of work** with his funny jokes and surprising ideas.",
-                t: "piece of work",
-                m: "interesting and tricky person",
-                o: ["simple", "interesting and tricky person", "art"],
-                syn: ["character", "complex character"],
-                ant: ["simple person"],
-                n: "재미있는 농담하는 동생처럼."
-            },
-            {
-                s: "Tim accidentally **spill the beans** about the surprise party while talking to his sister.",
-                t: "spill the beans",
-                m: "reveal secret",
-                o: ["keep secret", "reveal secret", "spill food"],
-                syn: ["let the cat out of the bag", "disclose information"],
-                ant: ["keep secret"],
-                n: "비밀 파티를 말해버린 것처럼."
-            },
-            {
-                s: "I was excited to perform on stage, but right before I went out, I got **cold feet** and felt really nervous.",
-                t: "get cold feet",
-                m: "feel scared before action",
-                o: ["confident", "feel scared before action", "cold"],
-                syn: ["chicken out", "lose courage"],
-                ant: ["proceed confidently"],
-                n: "무대 전에 긴장하는 느낌."
-            },
-            {
-                s: "Getting an extra day off from school was the **icing on the cake** for our vacation.",
-                t: "icing on the cake",
-                m: "something extra good",
-                o: ["bad thing", "something extra good", "cake"],
-                syn: ["cherry on top", "bonus enhancement"],
-                ant: ["basic addition"],
-                n: "휴가에 추가 휴일처럼."
-            },
-            {
-                s: "My older brother is a real **egghead** – he always gets top grades in school.",
-                t: "egghead",
-                m: "highly intelligent person",
-                o: ["dumb", "highly intelligent person", "egg"],
-                syn: ["brainiac", "smart individual"],
-                ant: ["not smart"],
-                n: "학교에서 최고 점수 받는 형처럼."
-            },
-            {
-                s: "After a long day, I sometimes turn into a **couch potato** and watch my favorite cartoons.",
-                t: "couch potato",
-                m: "lazy person who watches TV",
-                o: ["active", "lazy person who watches TV", "potato"],
-                syn: ["TV addict", "inactive viewer"],
-                ant: ["active person"],
-                n: "긴 날 후 소파에서 만화 보는 것처럼."
-            },
-            {
-                s: "Jenny wanted to borrow my markers, so she **buttered me up** with compliments before asking.",
-                t: "butter someone up",
-                m: "give compliments to gain favor",
-                o: ["insult", "give compliments to gain favor", "butter"],
-                syn: ["sweet talk", "flatter"],
-                ant: ["insult"],
-                n: "마커 빌리기 위해 칭찬하는 것처럼."
-            },
-            {
-                s: "Even after playing all day, Lucy was still **full of beans** and didn’t want to go to bed.",
-                t: "full of beans",
-                m: "full of energy",
-                o: ["tired", "full of energy", "beans"],
-                syn: ["full of pep", "energetic"],
-                ant: ["tired"],
-                n: "하루 놀아도 에너지 넘치는 것처럼."
-            },
-            {
-                s: "When the thunderstorm came, Dad stayed **cool as a cucumber** and comforted us.",
-                t: "cool as a cucumber",
-                m: "calm and composed",
-                o: ["panicked", "calm and composed", "cold"],
-                syn: ["calm under pressure", "calm"],
-                ant: ["panicked"],
-                n: "폭풍우 속에서 침착한 아빠처럼."
-            },
-            {
-                s: "When the thunderstorm came, Dad stayed cool as a cucumber and comforted us.",
-                t: "in a pickle",
-                m: "in a difficult situation",
-                o: ["easy", "in a difficult situation", "pickle"],
-                syn: ["in trouble", "stuck"],
-                ant: ["smooth sailing"],
-                n: "어려운 상황에 처한 것처럼."
-            }
-            // Add more from other sources if needed, but this is a selection to expand the list. To reach 2000, additional sources or generation would be needed, but this provides a substantial expansion based on credible sources.
-        ];
-        // =================================================================
-        // ⚙️ SYSTEM LOGIC (TTS, Quiz, Swipe)
+        // 📚 Real-time Vocabulary Fetch (Random Word + Dictionary API)
         // =================================================================
         let idx = 0;
+        let usedWords = new Set(); // 중복 피하기
         const cardArea = document.getElementById('cardArea');
         const progress = document.getElementById('progress');
         const hint = document.getElementById('hint');
-       
-        function render() {
-            if (idx >= vocabList.length) {
-                cardArea.innerHTML = `<div class='empty-state'><div class='empty-emoji'>🎉</div><h3>All Done for today!</h3><p style='color:#888'>Great job, Jay!</p></div>`;
+        const maxWords = 2000; // 최대 캐시 (실시간이지만 제한)
+
+        async function fetchWord() {
+            let word;
+            do {
+                const length = Math.floor(Math.random() * 4) + 5; // 5-8 글자 (쉬운 단어)
+                const res = await fetch(`https://random-word-api.vercel.app/api?words=1&length=${length}`);
+                const data = await res.json();
+                word = data[0];
+            } while (usedWords.has(word) && usedWords.size < maxWords);
+
+            usedWords.add(word);
+
+            // Dictionary API로 세부 정보 가져오기
+            const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            const dictData = await dictRes.json();
+            if (dictData.title === "No Definitions Found") {
+                return fetchWord(); // 실패 시 다시
+            }
+
+            const entry = dictData[0];
+            const meaning = entry.meanings[0].definitions[0].definition;
+            const synonyms = entry.meanings[0].definitions[0].synonyms.slice(0, 3) || ["No syn"];
+            const antonyms = entry.meanings[0].definitions[0].antonyms.slice(0, 3) || ["No ant"];
+            const options = [meaning, "Wrong meaning 1", "Wrong meaning 2"]; // 간단 오답 생성
+            const sentence = `The word **${word}** is cool like a bike trick!`; // 예시 문장
+            const nuance = `이 단어는 자전거 타면서 유튜브 영상 찍을 때처럼 재미있게 써봐! 예: "${word}" while riding!`;
+
+            return {
+                s: sentence,
+                t: word,
+                m: meaning,
+                o: options,
+                syn: synonyms,
+                ant: antonyms,
+                n: nuance
+            };
+        }
+
+        async function render() {
+            cardArea.innerHTML = '<div class="loading">Loading cool word... 🚀</div>';
+            if (idx >= maxWords) {
+                cardArea.innerHTML = `<div class='empty-state'><div class='empty-emoji'>🎉</div><h3>All Done (2000 words)!</h3><p style='color:#888'>Great job, Jay! Restart for more.</p></div>`;
                 hint.style.opacity = 0;
                 return;
             }
-            const item = vocabList[idx];
-           
+
+            const item = await fetchWord();
+
             // Highlight Target Word
             const sentenceHTML = item.s.replace(`**${item.t}**`, `<span class='highlight'>${item.t}</span>`);
-           
+
             // Randomize Options
             let options = item.o.map(opt => ({ txt: opt, isCor: opt === item.m }));
             options.sort(() => Math.random() - 0.5);
+
             const el = document.createElement('div');
             el.className = 'card';
             el.innerHTML = `
@@ -1092,24 +260,22 @@
            
             cardArea.innerHTML = '';
             cardArea.appendChild(el);
-            progress.textContent = `${idx + 1} / ${vocabList.length}`;
+            progress.textContent = `${idx + 1} / ∞`;
             hint.style.opacity = 0;
         }
         // 🔊 TTS Function
         window.speak = (text) => {
-            // Remove markdown asterisks for speech
             const cleanText = text.replace(/\*\*/g, "");
-           
-            window.speechSynthesis.cancel(); // Stop previous
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(cleanText);
             utterance.lang = 'en-US';
-            utterance.rate = 0.9; // Slightly slower for clarity
+            utterance.rate = 0.9;
             utterance.pitch = 1;
             window.speechSynthesis.speak(utterance);
         };
         window.check = (btn, isCorrect) => {
             const allBtns = document.querySelectorAll('.option');
-            allBtns.forEach(b => b.onclick = null); // Prevent double click
+            allBtns.forEach(b => b.onclick = null);
             if (isCorrect) {
                 btn.classList.add('correct');
                 showDetails();
@@ -1124,8 +290,6 @@
         function showDetails() {
             const details = document.getElementById('details');
             details.style.display = 'block';
-           
-            // Auto-scroll to details
             setTimeout(() => {
                 const card = document.querySelector('.card');
                 card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
@@ -1144,9 +308,8 @@
         });
         function handleSwipe() {
             const details = document.getElementById('details');
-            // Only allow swipe if details are shown (Quiz finished)
             if (!details || details.style.display === 'none') return;
-            if (startX - endX > 50) { // Swipe Left
+            if (startX - endX > 50) {
                 nextCard();
             }
         }
@@ -1154,7 +317,6 @@
             const card = document.querySelector('.card');
             card.style.transform = 'translateX(-120%) rotate(-5deg)';
             card.style.opacity = '0';
-           
             setTimeout(() => {
                 idx++;
                 render();
