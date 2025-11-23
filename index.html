@@ -3,110 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jay's Fast Vault</title>
+    <title>Jay's Pro Vault</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* Lite Version: Clean, Fast, Typography-focused */
         :root {
-            --bg: #F0F2F5;
+            --bg: #F5F7FA;
             --card-bg: #FFFFFF;
-            --text-main: #111;
-            --text-sub: #666;
-            --blue: #2979FF; /* Vivid Blue */
-            --accent: #FF1744; /* Vivid Red */
-            --green-bg: #E8F5E9; --green-text: #1B5E20;
-            --red-bg: #FFEBEE; --red-text: #B71C1C;
-            --purple-bg: #F3E5F5; --purple-text: #4A148C;
+            --text-main: #2C3E50;
+            --text-sub: #7F8C8D;
+            --blue: #2980B9;
+            --red: #E74C3C;
+            --green: #27AE60;
+            --accent: #8E44AD;
         }
 
         * { box-sizing: border-box; }
 
         body {
             margin: 0; background-color: var(--bg);
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
         header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-        .brand { font-size: 20px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; }
-        .counter { font-size: 13px; font-weight: 700; color: white; background: var(--text-main); padding: 5px 12px; border-radius: 20px; }
+        .brand { font-size: 22px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px; }
+        .counter { font-size: 14px; font-weight: 700; color: white; background: var(--text-main); padding: 6px 14px; border-radius: 20px; }
 
         .viewport {
-            flex: 1; display: flex; justify-content: center; align-items: center; position: relative; padding: 20px;
+            flex: 1; display: flex; justify-content: center; align-items: center; position: relative; padding: 10px;
         }
 
         .card {
-            width: 100%; height: 100%; max-width: 380px; max-height: 650px;
+            width: 100%; height: 100%; max-width: 400px; max-height: 700px;
             background: var(--card-bg); border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
             display: flex; flex-direction: column;
             position: absolute; 
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
-            
-            /* 스크롤 핵심 설정 */
+            transition: transform 0.25s ease-out, opacity 0.2s;
             overflow-y: auto; 
-            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+            -webkit-overflow-scrolling: touch;
             padding: 30px 25px;
-            border: 1px solid rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
         }
-        
-        /* 스크롤바 숨김 */
         .card::-webkit-scrollbar { display: none; }
 
-        /* CONTENT STYLES */
-        .word-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        
+        .word-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
         .word-info { display: flex; flex-direction: column; gap: 8px; }
-        .target-word { font-size: 34px; font-weight: 900; color: var(--text-main); line-height: 1; text-transform: capitalize; letter-spacing: -1px; }
-        .phonetic { font-family: 'Times New Roman', serif; font-size: 18px; color: var(--text-sub); display: inline-block; background: #F5F5F5; padding: 4px 8px; border-radius: 6px; align-self: flex-start;}
+        .target-word { font-size: 32px; font-weight: 900; color: var(--text-main); line-height: 1.1; letter-spacing: -0.5px; }
+        .phonetic { font-family: 'Times New Roman', serif; font-size: 18px; color: var(--text-sub); background: #F0F2F5; padding: 4px 10px; border-radius: 8px; align-self: flex-start; }
         
         .audio-btn {
-            width: 48px; height: 48px; border-radius: 50%; background: var(--blue); border: none;
-            color: white; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(41, 121, 255, 0.3); transition: 0.2s; flex-shrink: 0;
+            width: 44px; height: 44px; border-radius: 50%; background: var(--blue); border: none;
+            color: white; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3); transition: 0.2s; flex-shrink: 0;
         }
-        .audio-btn:active { transform: scale(0.92); }
+        .audio-btn:active { transform: scale(0.95); }
 
         .sentence-box { margin-bottom: 30px; }
-        .sentence { font-size: 21px; font-weight: 700; line-height: 1.5; color: #222; }
-        .highlight { color: var(--blue); background: rgba(41, 121, 255, 0.1); padding: 0 4px; border-radius: 4px; }
+        .sentence { font-size: 20px; font-weight: 600; line-height: 1.5; color: #34495E; }
+        .highlight { color: var(--blue); background: rgba(41, 128, 185, 0.1); padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
-        /* QUIZ AREA */
         .quiz-area { display: flex; flex-direction: column; gap: 12px; margin-top: auto; padding-bottom: 20px; }
-        .quiz-label { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .quiz-label { font-size: 12px; font-weight: 800; color: #BDC3C7; text-transform: uppercase; letter-spacing: 1px; }
         
         .option {
-            padding: 18px; border: 2px solid #F2F4F8; border-radius: 16px;
+            padding: 18px; border: 2px solid #ECF0F1; border-radius: 16px;
             font-size: 16px; font-weight: 600; color: var(--text-main); background: white;
-            cursor: pointer; transition: 0.1s; text-align: left;
+            cursor: pointer; transition: all 0.2s; text-align: left;
         }
-        .option:active { transform: scale(0.98); background: #FAFAFA; }
-        .option.correct { border-color: var(--blue); background: #F0F7FF; color: var(--blue); }
-        .option.wrong { border-color: #FFCDD2; background: #FFF5F5; color: #C62828; }
+        .option:active { transform: scale(0.98); background: #F9F9F9; }
+        
+        /* 정답/오답 스타일 */
+        .option.correct { border-color: var(--green); background: #EAFAF1; color: var(--green); }
+        .option.wrong { border-color: var(--red); background: #FADBD8; color: var(--red); animation: shake 0.4s; }
 
-        /* DETAILS (Hidden initially) */
-        .details { display: none; margin-top: 10px; padding-top: 25px; border-top: 2px dashed #EEE; animation: fadeIn 0.3s ease-out; margin-bottom: 40px;}
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); }
+        }
+
+        .details { display: none; margin-top: 15px; padding-top: 25px; border-top: 2px dashed #BDC3C7; animation: fadeIn 0.4s ease-out; margin-bottom: 30px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .extra-context { background: #F8F9FA; padding: 18px; border-radius: 14px; margin-bottom: 20px; border-left: 4px solid var(--accent); }
-        .ctx-label { font-size: 11px; font-weight: 800; color: var(--text-sub); display: block; margin-bottom: 6px; text-transform: uppercase; }
-        .ctx-text { font-size: 16px; color: #333; line-height: 1.5; font-weight: 500; font-style: italic; }
+        .extra-context { background: #F4F6F7; padding: 18px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid var(--accent); }
+        .ctx-label { font-size: 11px; font-weight: 900; color: var(--text-sub); display: block; margin-bottom: 8px; text-transform: uppercase; }
+        .ctx-text { font-size: 16px; color: #2C3E50; line-height: 1.5; font-weight: 500; font-style: italic; }
 
         .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-        .tag { padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; }
-        .t-syn { background: var(--green-bg); color: var(--green-text); }
-        .t-ant { background: var(--red-bg); color: var(--red-text); }
-        .t-nuance { background: var(--purple-bg); color: var(--purple-text); width: 100%; line-height: 1.5; }
+        .tag { padding: 6px 12px; border-radius: 8px; font-size: 14px; font-weight: 700; }
+        .t-syn { background: #E8F8F5; color: #16A085; }
+        .t-ant { background: #FDEDEC; color: #C0392B; }
+        .t-nuance { background: #F4ECF7; color: #8E44AD; width: 100%; line-height: 1.5; }
 
-        .next-hint { position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 14px; color: #BBB; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .next-hint { position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 14px; color: #95A5A6; opacity: 0; pointer-events: none; transition: 0.3s; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">Jay's Vault ⚡</div>
-        <div class="counter" id="progress">1 / 160</div>
+        <div class="brand">Jay's Pro Vault</div>
+        <div class="counter" id="progress">1 / 200</div>
     </header>
 
     <div class="viewport" id="cardArea"></div>
@@ -114,160 +110,242 @@
 
     <script>
         // =================================================================
-        // 📚 JAY'S MASSIVE DATA (160+ Words) - Text Only Optimized
+        // 📚 JAY'S PRO DATABASE (200 High-Level Words)
+        // Grade 5-8 Tier 2 Vocabulary & Sophisticated Idioms
         // =================================================================
         const rawData = [
-            // [SECTION 1: Essential Idioms & Phrasal Verbs]
-            {t:"piece of cake", p:"/piːs əv keɪk/", m:"Very easy", s:"The math test was a **piece of cake**.", e:"Fixing this flat tire is a piece of cake for me.", o:["Hard","Very easy","Delicious"], syn:["Breeze","Walk in the park"], n:"식은 죽 먹기 (누워서 떡 먹기)"},
-            {t:"call it a day", p:"/kɔːl ɪt ə deɪ/", m:"Stop working", s:"We're tired, let's **call it a day**.", e:"The coach decided to call it a day after 3 hours of practice.", o:["Start","Stop working","Call friend"], syn:["Wrap up","Finish"], n:"오늘은 여기까지! (퇴근)"},
-            {t:"under the weather", p:"/ˈʌn.də ðə ˈweð.ə/", m:"Feeling sick", s:"I won't go to school, I'm **under the weather**.", e:"He missed the game because he was feeling a bit under the weather.", o:["Happy","Feeling sick","Rainy"], syn:["Unwell","Ill"], n:"컨디션이 좀 안 좋은 (몸살 기운)"},
-            {t:"break a leg", p:"/breɪk ə leɡ/", m:"Good luck", s:"**Break a leg** tonight!", e:"Go out there on stage and break a leg!", o:["Get hurt","Good luck","Run fast"], syn:["Best wishes"], n:"행운을 빌어! (공연/발표 전)"},
-            {t:"bite the bullet", p:"/baɪt ðə ˈbʊl.ɪt/", m:"Endure painful thing", s:"I had to **bite the bullet** and apologize.", e:"He bit the bullet and went to the dentist.", o:["Eat metal","Endure pain","Shoot"], syn:["Tough it out","Face it"], n:"눈 딱 감고 하기 싫은 일을 참아내다"},
-            {t:"hit the nail on the head", p:"/hɪt ðə neɪl ɒn ðə hed/", m:"Be exactly right", s:"Wow, you **hit the nail on the head**.", e:"Her analysis of the problem hit the nail on the head.", o:["Hurt hand","Be exactly right","Build"], syn:["Spot on"], n:"정곡을 찌르다 (완벽한 정답)"},
-            {t:"cut corners", p:"/kʌt ˈkɔː.nəz/", m:"Do badly to save time", s:"Don't **cut corners** on your homework.", e:"The builder cut corners, and the roof leaked.", o:["Use scissors","Do quickly/badly","Be careful"], syn:["Skimp","Rush"], n:"대충 빨리 하려고 절차를 무시하다"},
-            {t:"hang in there", p:"/hæŋ ɪn ðeər/", m:"Don't give up", s:"Just **hang in there**, winter is almost over.", e:"Hang in there, you'll solve this level soon.", o:["Let go","Don't give up","Climb"], syn:["Persist","Keep going"], n:"조금만 더 버텨 (존버해!)"},
-            {t:"once in a blue moon", p:"/wʌns ɪn ə bluː muːn/", m:"Very rarely", s:"I see him **once in a blue moon**.", e:"My dad cooks dinner once in a blue moon.", o:["Often","Very rarely","Daily"], syn:["Hardly ever","Rarely"], n:"가뭄에 콩 나듯 아주 가끔"},
-            {t:"let the cat out of the bag", p:"/let ðə kæt aʊt əv ðə bæɡ/", m:"Reveal a secret", s:"Who **let the cat out of the bag** about the party?", e:"I accidentally let the cat out of the bag about his gift.", o:["Lose pet","Reveal secret","Buy bag"], syn:["Spill the beans"], n:"비밀을 실수로 누설하다"},
-            {t:"cost an arm and a leg", p:"/kɒst ən ɑːm ænd ə leɡ/", m:"Very expensive", s:"That new bike **costs an arm and a leg**.", e:"Flying business class costs an arm and a leg.", o:["Cheap","Very expensive","Hurt"], syn:["Cost a fortune","Pricey"], n:"팔다리를 내줄 만큼 엄청 비싼"},
-            {t:"judge a book by its cover", p:"/dʒʌdʒ ə bʊk baɪ ɪts ˈkʌv.ər/", m:"Judge by appearance", s:"Don't **judge a book by its cover**.", e:"The restaurant looked shabby, but don't judge a book by its cover; the food was amazing.", o:["Read","Judge by appearance","Buy"], syn:["Prejudge"], n:"겉모습만 보고 판단하지 마"},
-            {t:"get out of hand", p:"/ɡet aʊt əv hænd/", m:"Become uncontrollable", s:"The party **got out of hand**.", e:"The prank got out of hand and someone got hurt.", o:["Hold hands","Uncontrollable","Clean hands"], syn:["Out of control"], n:"걷잡을 수 없이 통제 불능이 되다"},
-            {t:"pull someone's leg", p:"/pʊl ˈsʌm.wʌnz leɡ/", m:"Joke/Tease", s:"Are you serious or just **pulling my leg**?", e:"I was just pulling your leg, I didn't really eat your cookie.", o:["Hurt leg","Joke/Tease","Help"], syn:["Kidding","Teasing"], n:"놀리다, 농담하다 (뻥치시네!)"},
-            {t:"speak of the devil", p:"/spiːk əv ðə ˈdev.əl/", m:"Person appears when mentioned", s:"Hi Tom! **Speak of the devil**.", e:"We were just talking about you, speak of the devil!", o:["Bad person","Person appears","Scary"], syn:["Look who it is"], n:"호랑이도 제 말 하면 온다더니"},
-            {t:"the best of both worlds", p:"/ðə best əv bəʊθ wɜːldz/", m:"Ideal situation", s:"Working from home is **the best of both worlds**.", e:"He has the best of both worlds: a good job and lots of free time.", o:["Worst situation","Ideal situation","Two planets"], syn:["Win-win"], n:"두 마리 토끼를 다 잡은 상황 (일거양득)"},
-            {t:"time flies", p:"/taɪm flaɪz/", m:"Time passes quickly", s:"Wow, it's already 6 PM? **Time flies**.", e:"Time flies when you're having fun gaming.", o:["Slow time","Time passes quickly","Bird flies"], syn:["Time goes fast"], n:"시간이 쏜살같이 지나가다"},
-            {t:"up in the air", p:"/ʌp ɪn ði eər/", m:"Uncertain/Undecided", s:"Our vacation plans are still **up in the air**.", e:"The release date for the game is still up in the air.", o:["Flying","Uncertain","Decided"], syn:["Unsure","Pending"], n:"아직 결정 안 된, 붕 떠 있는 상태"},
-            {t:"give someone the cold shoulder", p:"/ɡɪv ˈsʌm.wʌn ðə kəʊld ˈʃəʊl.dər/", m:"Ignore intentionally", s:"She **gave me the cold shoulder** after the argument.", e:"Why are you giving him the cold shoulder?", o:["Hug","Ignore","Freeze"], syn:["Snub","Ignore"], n:"쌀쌀맞게 대하며 무시하다"},
-            {t:"on the same page", p:"/ɒn ðə seɪm peɪdʒ/", m:"Agree/Understand", s:"I want to make sure we are **on the same page**.", e:"Before we start the project, let's get on the same page.", o:["Reading book","Agree","Writing"], syn:["In agreement"], n:"서로 같은 생각을 하고 있다 (이해 일치)"},
-            {t:"figure out", p:"/ˈfɪɡ.ər aʊt/", m:"Understand/Solve", s:"I can't **figure out** this puzzle.", e:"We need to figure out how to fix the server lag.", o:["Draw","Understand/Solve","Count"], syn:["Solve","Determine"], n:"알아내다, 해결책을 찾다"},
-            {t:"show up", p:"/ʃəʊ ʌp/", m:"Arrive/Appear", s:"He didn't **show up** for practice.", e:"You can't just show up late every time.", o:["Hide","Arrive","Watch show"], syn:["Arrive","Appear"], n:"나타나다, 모습을 드러내다"},
-            {t:"give up", p:"/ɡɪv ʌp/", m:"Quit/Stop trying", s:"Never **give up** on your dreams.", e:"Don't give up just because the level is hard.", o:["Start","Quit","Receive"], syn:["Quit","Surrender"], n:"포기하다"},
-            {t:"look forward to", p:"/lʊk ˈfɔː.wəd tuː/", m:"Be excited about future", s:"I **look forward to** the weekend.", e:"We look forward to seeing you in Canada.", o:["Look back","Be excited about","Watch"], syn:["Anticipate"], n:"엄청 기대하다 (학수고대)"},
-            {t:"run out of", p:"/rʌn aʊt əv/", m:"Use all of something", s:"We **ran out of** milk.", e:"My controller ran out of battery.", o:["Run away","Use all of","Buy"], syn:["Deplete"], n:"~이 다 떨어지다, 바닥나다"},
+            // [SECTION 1: Academic & Critical Thinking (Tier 2)] - 학교, 에세이, 토론용
+            {t:"analyze", p:"/ˈæn.əl.aɪz/", m:"To examine closely", s:"We need to **analyze** the evidence.", e:"The scientist analyzed the data to find a cure.", o:["Guess","Examine closely","Ignore"], syn:["Inspect","Scrutinize"], n:"현미경으로 보듯 꼼꼼히 뜯어보고 분석하다"},
+            {t:"hypothesis", p:"/haɪˈpɒθ.ə.sɪs/", m:"Educated guess", s:"Test your **hypothesis** in the lab.", e:"My hypothesis is that the plant needs more light.", o:["Fact","Educated guess","Lie"], syn:["Theory","Proposition"], n:"실험이나 증명 전의 '가설'"},
+            {t:"consequence", p:"/ˈkɒn.sɪ.kwəns/", m:"Result of an action", s:"Every choice has a **consequence**.", e:"He accepted the consequence of missing the deadline.", o:["Start","Result","Reward"], syn:["Outcome","Repercussion"], n:"행동에 뒤따르는 결과 (주로 진지한 상황)"},
+            {t:"approximate", p:"/əˈprɒk.sɪ.mət/", m:"Almost correct", s:"The **approximate** cost is $100.", e:"Can you give me the approximate time of arrival?", o:["Exact","Almost correct","Wrong"], syn:["Estimated","Rough"], n:"완전히 정확하진 않지만 '얼추' 맞는"},
+            {t:"context", p:"/ˈkɒn.tekst/", m:"Surrounding situation", s:"Understand the **context** of the story.", e:"Taking his words out of context made him look bad.", o:["End","Situation/Background","Word"], syn:["Background","Setting"], n:"문맥, 전후 사정 (맥락을 파악해라)"},
+            {t:"establish", p:"/ɪˈstæb.lɪʃ/", m:"Set up/Create", s:"They **established** a new rule.", e:"The school was established in 1990.", o:["Destroy","Set up","Hide"], syn:["Found","Institute"], n:"단단히 기반을 닦고 세우다"},
+            {t:"indicate", p:"/ˈɪn.dɪ.keɪt/", m:"Point out/Show", s:"The sign **indicates** the exit.", e:"Research indicates that sleep is vital.", o:["Hide","Show","Stop"], syn:["Signify","Demonstrate"], n:"가리키다, 나타내다"},
+            {t:"significant", p:"/sɪɡˈnɪf.ɪ.kənt/", m:"Important/Meaningful", s:"A **significant** improvement.", e:"There was a significant change in the weather.", o:["Tiny","Important","Boring"], syn:["Major","Substantial"], n:"그냥 중요한 게 아니라 '의미가 있을 정도로' 큰"},
+            {t:"evaluate", p:"/ɪˈvæl.ju.eɪt/", m:"Judge the quality", s:"Teachers **evaluate** your work.", e:"We need to evaluate the risks before starting.", o:["Ignore","Judge/Assess","Copy"], syn:["Assess","Appraise"], n:"가치나 수준을 평가하다"},
+            {t:"perspective", p:"/pəˈspek.tɪv/", m:"Point of view", s:"From my **perspective**...", e:"Try to see the problem from his perspective.", o:["Glasses","Point of view","Height"], syn:["Viewpoint","Angle"], n:"관점, 시각 (보는 각도)"},
+            {t:"assume", p:"/əˈsjuːm/", m:"Believe without proof", s:"Don't **assume** I know.", e:"I assumed you were coming to the party.", o:["Know","Believe w/o proof","Deny"], syn:["Presume","Suppose"], n:"(확인 안 하고) 당연히 그럴 거라 생각하다"},
+            {t:"interpret", p:"/ɪnˈtɜː.prɪt/", m:"Explain meaning", s:"How do you **interpret** this poem?", e:"He interpreted her silence as anger.", o:["Write","Explain/Understand","Ignore"], syn:["Decipher","Translate"], n:"해석하다 (의미를 파악하다)"},
+            {t:"method", p:"/ˈmeθ.əd/", m:"Way of doing something", s:"A scientific **method**.", e:"What method do you use to study?", o:["Luck","Way/System","Game"], syn:["Technique","Approach"], n:"체계적인 방법, 방식"},
+            {t:"concept", p:"/ˈkɒn.sept/", m:"Abstract idea", s:"The **concept** of freedom.", e:"It's a difficult concept to understand.", o:["Object","Idea","Person"], syn:["Notion","Theory"], n:"개념 (머릿속의 아이디어)"},
+            {t:"specific", p:"/spəˈsɪf.ɪk/", m:"Particular/Exact", s:"Be **specific** about what you want.", e:"Is there a specific color you prefer?", o:["General","Exact","Vague"], syn:["Precise","Definite"], n:"구체적인, 특정한"},
+            {t:"variable", p:"/ˈveə.ri.ə.bəl/", m:"Thing that changes", s:"The weather is a **variable**.", e:"In science experiments, control the variables.", o:["Constant","Changing thing","Rock"], syn:["Factor"], n:"변수 (결과를 바꿀 수 있는 요인)"},
+            {t:"formula", p:"/ˈfɔː.mjə.lə/", m:"Mathematical rule", s:"Memorize the **formula**.", e:"There is no magic formula for success.", o:["Story","Rule/Recipe","Picture"], syn:["Recipe","Equation"], n:"공식, 비결"},
+            {t:"evident", p:"/ˈev.ɪ.dənt/", m:"Clearly seen", s:"It was **evident** he was lying.", e:"His happiness was evident to everyone.", o:["Hidden","Clear/Obvious","Confusing"], syn:["Obvious","Apparent"], n:"누가 봐도 분명한"},
+            {t:"benefit", p:"/ˈben.ɪ.fɪt/", m:"Advantage/Good result", s:"The **benefit** of exercise.", e:"What is the benefit of joining this club?", o:["Loss","Advantage","Cost"], syn:["Profit","Gain"], n:"이익, 혜택"},
+            {t:"issue", p:"/ˈɪʃ.uː/", m:"Problem/Topic", s:"We discussed the **issue**.", e:"Environmental issues are important.", o:["Answer","Problem/Topic","Game"], syn:["Matter","Subject"], n:"논쟁이 되는 문제나 사안"},
+            {t:"imply", p:"/ɪmˈplaɪ/", m:"Suggest indirectly", s:"Are you **implying** I'm wrong?", e:"The dark clouds imply a storm is coming.", o:["Say directly","Suggest/Hint","Shout"], syn:["Hint","Insinuate"], n:"넌지시 암시하다, 비추다"},
+            {t:"affect", p:"/əˈfekt/", m:"To influence", s:"Weather **affects** my mood.", e:"How will this decision affect us?", o:["Result","Influence","Stop"], syn:["Impact","Alter"], n:"영향을 미치다 (동사)"},
+            {t:"factor", p:"/ˈfæk.tər/", m:"Part of a cause", s:"Cost is a major **factor**.", e:"One factor in his success was hard work.", o:["Result","Cause/Part","End"], syn:["Element","Component"], n:"요인, 요소 (원인의 일부)"},
+            {t:"primary", p:"/ˈpraɪ.mər.i/", m:"Main/Most important", s:"The **primary** reason.", e:"Our primary goal is safety.", o:["Last","Main","Small"], syn:["Main","Principal"], n:"주된, 제1의"},
+            {t:"source", p:"/sɔːs/", m:"Place of origin", s:"The **source** of the river.", e:"Check the source of that news.", o:["End","Origin","Middle"], syn:["Origin","Root"], n:"근원, 출처"},
+            {t:"theory", p:"/ˈθɪə.ri/", m:"Idea explaining something", s:"Darwin's **theory** of evolution.", e:"I have a theory about who stole the cookie.", o:["Fact","Idea/Explanation","Action"], syn:["Hypothesis"], n:"이론, 학설"},
+            {t:"complex", p:"/ˈkɒm.pleks/", m:"Not simple", s:"A **complex** puzzle.", e:"The human brain is very complex.", o:["Easy","Complicated","Short"], syn:["Intricate","Complicated"], n:"복잡한 (여러 가지가 얽힌)"},
+            {t:"equate", p:"/ɪˈkweɪt/", m:"Consider same", s:"You can't **equate** money with happiness.", e:"Don't equate silence with agreement.", o:["Separate","Treat as same","Fight"], syn:["Associate"], n:"동일시하다 (같다고 여기다)"},
+            {t:"administer", p:"/ədˈmɪn.ɪ.stər/", m:"Manage/Give", s:"**Administer** the test.", e:"The nurse administered the medicine.", o:["Receive","Manage/Give","Watch"], syn:["Manage","Direct"], n:"관리하다, 집행하다"},
+            {t:"restrict", p:"/rɪˈstrɪkt/", m:"Limit control", s:"**Restrict** your screen time.", e:"Access is restricted to staff only.", o:["Free","Limit","Open"], syn:["Limit","Confine"], n:"제한하다, 한정하다"},
+            {t:"construct", p:"/kənˈstrʌkt/", m:"Build", s:"**Construct** a bridge.", e:"Construct an argument for your essay.", o:["Destroy","Build","Watch"], syn:["Build","Create"], n:"건설하다, (논리를) 세우다"},
+            {t:"distinct", p:"/dɪˈstɪŋkt/", m:"Clearly different", s:"Two **distinct** smells.", e:"There is a distinct difference between them.", o:["Same","Different/Clear","Blurry"], syn:["Separate","Clear"], n:"뚜렷하게 다른, 별개의"},
+            {t:"element", p:"/ˈel.ɪ.mənt/", m:"Basic part", s:"An essential **element**.", e:"Honesty is a key element of trust.", o:["Whole","Part","End"], syn:["Component"], n:"구성 요소"},
+            {t:"item", p:"/ˈaɪ.təm/", m:"Single thing", s:"Pick an **item**.", e:"Check the items on the list.", o:["Group","Thing/Object","Idea"], syn:["Object","Article"], n:"항목, 물품"},
+            {t:"maintain", p:"/meɪnˈteɪn/", m:"Keep up", s:"**Maintain** your grades.", e:"Maintain a safe distance.", o:["Drop","Keep/Preserve","Change"], syn:["Preserve","Sustain"], n:"유지하다, 지키다"},
+            {t:"obtain", p:"/əbˈteɪn/", m:"Get/Acquire", s:"**Obtain** a permit.", e:"He obtained permission to leave.", o:["Lose","Get","Give"], syn:["Acquire","Gain"], n:"얻다, 획득하다 (Get의 고급 표현)"},
+            {t:"participate", p:"/pɑːˈtɪs.ɪ.peɪt/", m:"Join in", s:"**Participate** in class.", e:"Did you participate in the game?", o:["Watch","Join in","Leave"], syn:["Take part"], n:"참여하다, 참가하다"},
+            {t:"perceive", p:"/pəˈsiːv/", m:"Notice/Understand", s:"How do you **perceive** him?", e:"I perceive a change in your attitude.", o:["Ignore","Notice/See","Touch"], syn:["Discern","Detect"], n:"인지하다, 감지하다"},
+            {t:"purchase", p:"/ˈpɜː.tʃəs/", m:"Buy", s:"**Purchase** a ticket.", e:"Where did you purchase that bike?", o:["Sell","Buy","Steal"], syn:["Buy"], n:"구매하다 (Buy보다 격식)"},
+            {t:"range", p:"/reɪndʒ/", m:"Variety/Distance", s:"A wide **range** of colors.", e:"The price range is $10 to $20.", o:["Single","Variety/Limit","Circle"], syn:["Scope","Span"], n:"범위, 다양성"},
+            {t:"region", p:"/ˈriː.dʒən/", m:"Area", s:"A desert **region**.", e:"Which region of Canada did you live in?", o:["Time","Area/Place","Person"], syn:["Area","Zone"], n:"지역, 지방"},
+            {t:"regulate", p:"/ˈreɡ.jə.leɪt/", m:"Control by rule", s:"**Regulate** the temperature.", e:"Laws regulate speed limits.", o:["Free","Control","Ignore"], syn:["Control","Monitor"], n:"규제하다, 조절하다"},
+            {t:"relevant", p:"/ˈrel.ə.vənt/", m:"Connected to topic", s:"Is that **relevant**?", e:"Keep your comments relevant to the lesson.", o:["Unrelated","Connected","Funny"], syn:["Applicable"], n:"관련된, 적절한"},
+            {t:"reside", p:"/rɪˈzaɪd/", m:"Live in", s:"**Reside** in a city.", e:"He resides in New York.", o:["Visit","Live","Leave"], syn:["Live","Dwell"], n:"거주하다 (Live의 고급 표현)"},
+            {t:"resource", p:"/rɪˈzɔːs/", m:"Useful supply", s:"Natural **resources**.", e:"The library is a great resource for studying.", o:["Trash","Supply/Help","Problem"], syn:["Asset"], n:"자원, 재료"},
+            {t:"secure", p:"/sɪˈkjʊər/", m:"Safe/Fastened", s:"Keep it **secure**.", e:"Is the door secure?", o:["Open","Safe","Loose"], syn:["Safe","Protected"], n:"안전한, 확실한"},
+            {t:"select", p:"/sɪˈlekt/", m:"Choose", s:"**Select** an option.", e:"He was selected for the team.", o:["Refuse","Choose","Drop"], syn:["Choose","Pick"], n:"선발하다, 선택하다"},
+            {t:"transfer", p:"/trænsˈfɜːr/", m:"Move", s:"**Transfer** money.", e:"She transferred to a new school.", o:["Stay","Move","Stop"], syn:["Move","Shift"], n:"이동하다, 전학가다"},
 
-            // [SECTION 2: Grade 5-6 Tier 2 Academic Words]
-            {t:"analyze", p:"/ˈæn.əl.aɪz/", m:"Study closely", s:"We need to **analyze** the data.", e:"Coach analyzed the opponent's tactics.", o:["Guess","Study closely","Ignore"], syn:["Examine","Inspect"], n:"현미경으로 보듯 꼼꼼히 뜯어보다"},
-            {t:"elaborate", p:"/iˈlæb.ə.reɪt/", m:"Explain in detail", s:"Please **elaborate** on your idea.", e:"He elaborated on his plan to build the LEGO base.", o:["Stop talking","Explain detail","Simplify"], syn:["Expand","Clarify"], n:"살을 붙여서 자세히 설명하다"},
-            {t:"inevitable", p:"/ɪˈnev.ə.tə.bəl/", m:"Certain to happen", s:"Defeat was **inevitable**.", e:"It is inevitable that technology will change.", o:["Unlikely","Certain","Avoidable"], syn:["Unavoidable","Destined"], n:"피할 수 없는 운명 같은"},
-            {t:"beneficial", p:"/ˌben.əˈfɪʃ.əl/", m:"Helpful; good effect", s:"Exercise is **beneficial**.", e:"Learning coding is beneficial for your future.", o:["Harmful","Helpful","Bad"], syn:["Advantageous","Useful"], n:"단순히 좋은 게 아니라 '이득'이 됨"},
-            {t:"colossal", p:"/kəˈlɒs.əl/", m:"Extremely large", s:"A **colossal** mistake.", e:"The new stadium is a colossal structure.", o:["Tiny","Extremely large","Small"], syn:["Massive","Gigantic"], n:"빌딩처럼 입이 떡 벌어지게 거대한"},
-            {t:"reluctant", p:"/rɪˈlʌk.tənt/", m:"Unwilling; hesitant", s:"He was **reluctant** to share.", e:"She gave a reluctant smile.", o:["Eager","Unwilling","Happy"], syn:["Hesitant"], n:"하기 싫어서 쭈뼛거리는"},
-            {t:"obvious", p:"/ˈɒb.vi.əs/", m:"Easy to see", s:"It's **obvious** he is tired.", e:"The answer to the riddle was obvious.", o:["Hidden","Easy to see","Confusing"], syn:["Clear","Apparent"], n:"딱 보면 아는 (뻔한)"},
-            {t:"manipulate", p:"/məˈnɪp.jə.leɪt/", m:"Control skillfully", s:"He can **manipulate** the cards.", e:"Don't let others manipulate your decisions.", o:["Break","Control skillfully","Watch"], syn:["Handle","Influence"], n:"손이나 말로 능숙하게 조종하다"},
-            {t:"continuous", p:"/kənˈtɪn.ju.əs/", m:"Without stopping", s:"**Continuous** noise.", e:"The brain needs a continuous supply of oxygen.", o:["Stopping","Non-stop","Fast"], syn:["Constant","Ceaseless"], n:"끊김 없이 쭉 이어지는"},
-            {t:"justify", p:"/ˈdʒʌs.tɪ.faɪ/", m:"Prove right", s:"**Justify** your opinion.", e:"How can you justify being late?", o:["Hide","Prove right","Ignore"], syn:["Defend","Validate"], n:"이유를 대서 정당함을 증명하다"},
-            {t:"optimistic", p:"/ˌɒp.tɪˈmɪs.tɪk/", m:"Hopeful/Positive", s:"Be **optimistic**.", e:"He is optimistic about passing the level.", o:["Sad","Hopeful","Angry"], syn:["Positive"], n:"무조건 잘 될 거라 믿는 (낙관적)"},
-            {t:"collaborate", p:"/kəˈlæb.ə.reɪt/", m:"Work together", s:"Let's **collaborate**.", e:"They collaborated on the science project.", o:["Fight","Work together","Play"], syn:["Team up"], n:"힘을 합쳐서 같이 일하다 (콜라보)"},
-            {t:"accumulate", p:"/əˈkjuː.mjə.leɪt/", m:"Collect/Gather", s:"Snow began to **accumulate**.", e:"Try to accumulate as many points as possible.", o:["Scatter","Collect","Spend"], syn:["Amass","Build up"], n:"차곡차곡 모아서 쌓다"},
-            {t:"plausible", p:"/ˈplɔː.zə.bəl/", m:"Believable", s:"That's a **plausible** excuse.", e:"His story sounds plausible, but I'm not sure.", o:["Impossible","Believable","Funny"], syn:["Reasonable","Credible"], n:"'그럴듯한데?' 하고 믿을 만한"},
-            {t:"vertical", p:"/ˈvɜː.tɪ.kəl/", m:"Up and down", s:"A **vertical** line.", e:"The skateboard ramp has a vertical drop.", o:["Flat","Up and down","Round"], syn:["Upright"], n:"위아래로 쭉 뻗은 (수직의)"},
-            {t:"comprehensive", p:"/ˌkɒm.prɪˈhen.sɪv/", m:"Including everything", s:"A **comprehensive** guide.", e:"We need a comprehensive plan for the trip.", o:["Incomplete","Including all","Short"], syn:["Thorough","Complete"], n:"하나도 빠짐없이 모든 걸 포함한"},
-            {t:"repulsive", p:"/rɪˈpʌl.sɪv/", m:"Disgusting", s:"A **repulsive** smell.", e:"The villain's actions were repulsive.", o:["Nice","Disgusting","Sweet"], syn:["Revolting"], n:"구역질 날 정도로 역겨운"},
-            {t:"diligent", p:"/ˈdɪl.ɪ.dʒənt/", m:"Hard-working", s:"Be a **diligent** student.", e:"He was diligent in practicing his guitar.", o:["Lazy","Hard-working","Smart"], syn:["Industrious"], n:"개미처럼 부지런하고 성실한"},
-            {t:"rigid", p:"/ˈrɪdʒ.ɪd/", m:"Stiff/Not flexible", s:"A **rigid** rule.", e:"The plastic is too rigid to bend.", o:["Soft","Not flexible","Bouncy"], syn:["Stiff","Strict"], n:"너무 엄격하거나 뻣뻣해서 융통성 없는"},
-            {t:"antagonize", p:"/ænˈtæɡ.ə.naɪz/", m:"Make angry/Provoke", s:"Don't **antagonize** him.", e:"Stop antagonizing your little brother.", o:["Help","Make angry","Hug"], syn:["Provoke","Annoy"], n:"일부러 긁어서 적을 만들다"},
-            {t:"obscure", p:"/əbˈskjʊər/", m:"Hard to see/understand", s:"An **obscure** reference.", e:"The fog obscured the view of the mountain.", o:["Clear","Hard to see","Bright"], syn:["Vague","Conceal"], n:"애매모호하거나 가려서 잘 안 보이는"},
-            {t:"impartial", p:"/ɪmˈpɑː.ʃəl/", m:"Fair/Neutral", s:"A judge must be **impartial**.", e:"We need an impartial referee for the match.", o:["Biased","Fair","Angry"], syn:["Unbiased"], n:"어느 쪽 편도 들지 않는 (공정한)"},
-            {t:"valid", p:"/ˈvæl.ɪd/", m:"Logical/Correct", s:"That's a **valid** point.", e:"Do you have a valid reason for missing class?", o:["Wrong","Logical","Funny"], syn:["Legitimate"], n:"논리적으로 타당한 (말이 되는)"},
-            {t:"diverse", p:"/daɪˈvɜːs/", m:"Varied/Different", s:"A **diverse** group.", e:"The ocean has diverse marine life.", o:["Same","Different","Small"], syn:["Various"], n:"종류가 엄청 다양하고 다채로운"},
-            {t:"conserve", p:"/kənˈsɜːv/", m:"Save/Protect", s:"We must **conserve** water.", e:"Turn off lights to conserve energy.", o:["Waste","Save","Drink"], syn:["Preserve"], n:"아끼고 보존하다"},
-            {t:"excruciating", p:"/ɪkˈskruː.ʃi.eɪ.tɪŋ/", m:"Extremely painful", s:"**Excruciating** pain.", e:"He had an excruciating headache.", o:["Ticklish","Very painful","Nice"], syn:["Agonizing"], n:"죽을 만큼 극심한 고통"},
-            {t:"interfere", p:"/ˌɪn.təˈfɪər/", m:"Get involved/Stop", s:"Don't **interfere**.", e:"My sister always interferes when I'm gaming.", o:["Help","Get involved","Leave"], syn:["Meddle","Interrupt"], n:"끼어들어서 방해하다 (간섭)"},
-            {t:"tyrant", p:"/ˈtaɪ.rənt/", m:"Cruel leader", s:"The king was a **tyrant**.", e:"Stop acting like a tyrant and let us choose the movie.", o:["Kind leader","Cruel leader","Servant"], syn:["Dictator"], n:"자기 맘대로 하는 폭군"},
-            {t:"consequence", p:"/ˈkɒn.sɪ.kwəns/", m:"Result of action", s:"Face the **consequences**.", e:"Every action has a consequence.", o:["Start","Result","Problem"], syn:["Outcome"], n:"행동에 따른 (주로 안 좋은) 결과"},
-            {t:"approximate", p:"/əˈprɒk.sɪ.mət/", m:"Almost correct", s:"The **approximate** time.", e:"What is the approximate cost of the new iPad?", o:["Exact","Almost correct","Wrong"], syn:["Estimated"], n:"대략적인, 얼추 맞는"},
-            {t:"drastic", p:"/ˈdræs.tɪk/", m:"Extreme/Sudden", s:"A **drastic** change.", e:"We need to take drastic measures to fix this.", o:["Small","Extreme","Slow"], syn:["Severe"], n:"과감하고 급격한"},
-            {t:"frequent", p:"/ˈfriː.kwənt/", m:"Happening often", s:"**Frequent** visits.", e:"He is a frequent player of Minecraft.", o:["Rare","Often","Never"], syn:["Common"], n:"빈번하게 자주 일어나는"},
-            {t:"hesitate", p:"/ˈhez.ɪ.teɪt/", m:"Pause before doing", s:"Don't **hesitate** to ask.", e:"She hesitated before jumping into the pool.", o:["Rush","Pause","Stop"], syn:["Waver"], n:"망설이다, 주저하다"},
-            {t:"loathe", p:"/ləʊð/", m:"Hate very much", s:"I **loathe** broccoli.", e:"He loathes doing chores on weekends.", o:["Love","Hate a lot","Like"], syn:["Detest","Abhor"], n:"그냥 싫은 게 아니라 혐오할 정도로 싫어함"},
-            {t:"origin", p:"/ˈɒr.ɪ.dʒɪn/", m:"Beginning/Source", s:"The **origin** of the word.", e:"Scientists study the origin of the universe.", o:["End","Source","Middle"], syn:["Beginning"], n:"기원, 유래"},
-            {t:"possess", p:"/pəˈzes/", m:"To have/own", s:"He **possesses** great skill.", e:"You cannot possess dangerous items in school.", o:["Want","Have/Own","Lose"], syn:["Own"], n:"소유하다, 가지고 있다"},
-            {t:"predict", p:"/prɪˈdɪkt/", m:"Say what will happen", s:"Can you **predict** the score?", e:"It's hard to predict the weather here.", o:["Remember","Guess future","Explain"], syn:["Forecast"], n:"미리 예측하다"},
-            {t:"retrive", p:"/rɪˈtriːv/", m:"Get back", s:"**Retrieve** the ball.", e:"The dog retrieved the stick from the water.", o:["Throw","Get back","Leave"], syn:["Recover","Fetch"], n:"되찾아오다, 회수하다"},
-            {t:"superior", p:"/suːˈpɪə.ri.ər/", m:"Better than others", s:"**Superior** quality.", e:"This new gear is superior to the old one.", o:["Worse","Better","Same"], syn:["Better"], n:"남보다 월등히 우수한"},
-            {t:"tangible", p:"/ˈtæn.dʒə.bəl/", m:"Can be touched/Real", s:"**Tangible** evidence.", e:"We need tangible results, not just ideas.", o:["Imaginary","Real/Touchable","Invisible"], syn:["Concrete"], n:"손으로 만질 수 있는, 실체가 있는"},
-            {t:"unanimous", p:"/juːˈnæn.ɪ.məs/", m:"Everyone agreeing", s:"A **unanimous** decision.", e:"The jury reached a unanimous verdict.", o:["Disagreed","All agreeing","Confused"], syn:["United"], n:"만장일치의 (모두가 동의한)"},
-            {t:"verdict", p:"/ˈvɜː.dɪkt/", m:"Final decision", s:"The jury's **verdict**.", e:"What's your verdict on the new movie? Good or bad?", o:["Start","Final decision","Question"], syn:["Judgment"], n:"최종 판결이나 결론"},
-            {t:"wary", p:"/ˈweə.ri/", m:"Careful/Cautious", s:"Be **wary** of strangers.", e:"The cat was wary of the new dog.", o:["Careless","Careful","Happy"], syn:["Cautious"], n:"경계하고 조심하는"},
+            // [SECTION 2: Advanced Idioms & Expressions] - 원어민들이 매일 쓰는 표현
+            {t:"call it a day", p:"/kɔːl ɪt ə deɪ/", m:"Stop working", s:"Let's **call it a day**.", e:"We've done enough, call it a day.", o:["Start","Stop working","Call mom"], syn:["Finish up"], n:"오늘은 여기까지! (퇴근)"},
+            {t:"cut corners", p:"/kʌt ˈkɔː.nəz/", m:"Do cheaply/fast", s:"Don't **cut corners**.", e:"If you cut corners, the bridge will collapse.", o:["Use scissors","Do poorly to save","Be careful"], syn:["Skimp"], n:"대충 빨리 하려고 절차를 무시하다"},
+            {t:"get out of hand", p:"/ɡet aʊt əv hænd/", m:"Lose control", s:"The party **got out of hand**.", e:"The argument got out of hand quickly.", o:["Hold hands","Lose control","Clean up"], syn:["Uncontrollable"], n:"걷잡을 수 없게 되다"},
+            {t:"hang in there", p:"/hæŋ ɪn ðeər/", m:"Don't give up", s:"Just **hang in there**.", e:"Hang in there, exams are almost over.", o:["Let go","Persist","Climb"], syn:["Endure"], n:"조금만 더 버텨 (존버해!)"},
+            {t:"miss the boat", p:"/mɪs ðə bəʊt/", m:"Miss an opportunity", s:"You **missed the boat**.", e:"Buy tickets now or you'll miss the boat.", o:["Be late for ship","Miss chance","Swim"], syn:["Too late"], n:"기회를 놓치다 (버스 떠났다)"},
+            {t:"pull someone's leg", p:"/pʊl leɡ/", m:"Joke/Tease", s:"Are you **pulling my leg**?", e:"I'm just pulling your leg, I didn't eat your cake.", o:["Hurt leg","Joke/Tease","Help"], syn:["Kidding"], n:"놀리다, 농담하다 (뻥치시네)"},
+            {t:"under the weather", p:"/ˈʌn.də ðə ˈweð.ə/", m:"Feeling sick", s:"I'm **under the weather**.", e:"He stayed home because he was under the weather.", o:["Happy","Sick","Wet"], syn:["Ill"], n:"컨디션 난조, 몸살 기운"},
+            {t:"break the ice", p:"/breɪk ðə aɪs/", m:"Start conversation", s:"Let's **break the ice**.", e:"Play a game to break the ice at the party.", o:["Freeze","Start talking","Hit ice"], syn:["Warm up"], n:"서먹한 분위기를 깨다"},
+            {t:"cost an arm and a leg", p:"/kɒst.../", m:"Very expensive", s:"It **costs an arm and a leg**.", e:"That car costs an arm and a leg.", o:["Cheap","Expensive","Painful"], syn:["Pricey"], n:"팔다리를 내줄 만큼 비싼"},
+            {t:"let the cat out of the bag", p:"/let ðə kæt.../", m:"Reveal secret", s:"Who **let the cat out of the bag**?", e:"Don't let the cat out of the bag about the surprise.", o:["Lose pet","Tell secret","Buy bag"], syn:["Spill beans"], n:"비밀을 누설하다"},
+            {t:"once in a blue moon", p:"/bluː muːn/", m:"Very rarely", s:"It happens **once in a blue moon**.", e:"I see her once in a blue moon.", o:["Often","Rarely","Never"], syn:["Seldom"], n:"가뭄에 콩 나듯 아주 가끔"},
+            {t:"speak of the devil", p:"/spiːk əv ðə ˈdev.əl/", m:"Person appears", s:"Hi Tom! **Speak of the devil**.", e:"We were just talking about you, speak of the devil!", o:["Curse","Person appears","Run"], syn:["Look who it is"], n:"호랑이도 제 말 하면 온다더니"},
+            {t:"bite the bullet", p:"/baɪt ðə ˈbʊl.ɪt/", m:"Endure pain", s:"**Bite the bullet** and do it.", e:"I hate dentists, but I have to bite the bullet.", o:["Eat","Endure","Shoot"], syn:["Face it"], n:"눈 딱 감고 참아내다"},
+            {t:"best of both worlds", p:"/best.../", m:"Ideal situation", s:"The **best of both worlds**.", e:"Working from home is the best of both worlds.", o:["Worst","Ideal","Two planets"], syn:["Win-win"], n:"두 마리 토끼를 다 잡음 (일거양득)"},
+            {t:"time flies", p:"/taɪm flaɪz/", m:"Time passes fast", s:"**Time flies** when having fun.", e:"Wow, is it 10 PM? Time flies.", o:["Slow","Fast","Bird"], syn:["Goes fast"], n:"시간이 쏜살같이 가다"},
+            {t:"to make matters worse", p:"/meɪk ˈmæt.əz wɜːs/", m:"Make problem worse", s:"**To make matters worse**, it rained.", e:"He was late, and to make matters worse, he forgot his bag.", o:["Fix it","Worsen it","Ignore"], syn:["Aggravate"], n:"설상가상으로 (엎친 데 덮친 격)"},
+            {t:"give the cold shoulder", p:"/kəʊld ˈʃəʊl.dər/", m:"Ignore", s:"She gave me the **cold shoulder**.", e:"Why are you giving him the cold shoulder?", o:["Hug","Ignore","Freeze"], syn:["Snub"], n:"쌀쌀맞게 굴며 무시하다"},
+            {t:"hit the sack", p:"/hɪt ðə sæk/", m:"Go to sleep", s:"I'm going to **hit the sack**.", e:"It's midnight, time to hit the sack.", o:["Hit bag","Sleep","Work"], syn:["Go to bed"], n:"자러 가다"},
+            {t:"on the ball", p:"/ɒn ðə bɔːl/", m:"Alert/Efficient", s:"He is really **on the ball**.", e:"You need to be on the ball to pass this test.", o:["Playing","Alert/Ready","Lazy"], syn:["Sharp"], n:"빠릿빠릿하고 빈틈없는"},
+            {t:"wrap your head around", p:"/ræp.../", m:"Understand complex thing", s:"I can't **wrap my head around** it.", e:"Math is hard, I can't wrap my head around this formula.", o:["Wear hat","Understand","Forget"], syn:["Comprehend"], n:"도무지 이해가 안 가다"},
+            {t:"burn the midnight oil", p:"/bɜːn.../", m:"Work late night", s:"He's **burning the midnight oil**.", e:"I have to burn the midnight oil to finish this essay.", o:["Cook","Work late","Sleep"], syn:["Stay up"], n:"밤새워 공부하거나 일하다"},
+            {t:"judge a book by its cover", p:"/dʒʌdʒ.../", m:"Judge by appearance", s:"Don't **judge a book by its cover**.", e:"He looks mean, but don't judge a book by its cover.", o:["Read","Prejudge","Buy"], syn:["Stereotype"], n:"겉모습만 보고 판단하다"},
+            {t:"spill the beans", p:"/spɪl.../", m:"Tell secret", s:"Don't **spill the beans**.", e:"He spilled the beans about the surprise party.", o:["Cook","Tell secret","Clean"], syn:["Reveal"], n:"비밀을 털어놓다"},
+            {t:"take it with a grain of salt", p:"/ɡreɪn əv sɒlt/", m:"Don't believe completely", s:"**Take it with a grain of salt**.", e:"He exaggerates, so take his story with a grain of salt.", o:["Eat","Doubt a bit","Believe all"], syn:["Be skeptical"], n:"곧이곧대로 믿지 말고 걸러 들어라"},
+            {t:"ball is in your court", p:"/bɔːl.../", m:"It's your decision", s:"The **ball is in your court**.", e:"I made an offer, now the ball is in your court.", o:["Play game","Your turn/Choice","Run"], syn:["Up to you"], n:"이제 네가 결정할 차례야"},
 
-            // [SECTION 3: Sports & Action]
-            {t:"agile", p:"/ˈædʒ.aɪl/", m:"Moving quickly/easily", s:"The striker is very **agile**.", e:"He is agile enough to dodge the defenders.", o:["Slow","Quick/Easy","Clumsy"], syn:["Nimble"], n:"동작이 날렵하고 민첩한"},
-            {t:"stamina", p:"/ˈstæm.ɪ.nə/", m:"Endurance/Energy", s:"You need **stamina** for soccer.", e:"Running up the hill requires huge stamina.", o:["Speed","Endurance","Sleep"], syn:["Resilience"], n:"지치지 않고 오래 버티는 체력"},
-            {t:"momentum", p:"/məˈmen.təm/", m:"Force of movement", s:"The team gained **momentum**.", e:"The bike gained momentum going downhill.", o:["Stop","Force/Speed","Weight"], syn:["Impetus"], n:"점점 빨라지는 탄력이나 기세"},
-            {t:"opponent", p:"/əˈpəʊ.nənt/", m:"Person you fight against", s:"Respect your **opponent**.", e:"He shook hands with his opponent after the match.", o:["Teammate","Rival","Coach"], syn:["Adversary"], n:"경기나 토론의 상대방(적)"},
-            {t:"strategy", p:"/ˈstræt.ə.dʒi/", m:"Plan of action", s:"We need a winning **strategy**.", e:"Chess is a game of pure strategy.", o:["Luck","Plan","Strength"], syn:["Tactic"], n:"이기기 위한 치밀한 작전"},
-            {t:"penalty", p:"/ˈpen.əl.ti/", m:"Punishment for rule breaking", s:"The ref gave a **penalty**.", e:"He faced a penalty for high-sticking in hockey.", o:["Reward","Punishment","Goal"], syn:["Foul"], n:"반칙에 대한 벌칙 (페널티킥 등)"},
-            {t:"tournament", p:"/ˈtʊə.nə.mənt/", m:"Series of contests", s:"They won the **tournament**.", e:"Are you watching the World Cup tournament?", o:["Game","Contest series","Practice"], syn:["Championship"], n:"토너먼트 대회"},
-            {t:"defense", p:"/dɪˈfens/", m:"Protecting from attack", s:"Play good **defense**!", e:"Their defense is too strong to break through.", o:["Attack","Protection","Goal"], syn:["Protection"], n:"방어, 수비"},
-            {t:"offense", p:"/əˈfens/", m:"Attacking team/action", s:"Our **offense** needs to score.", e:"He is the best player on offense.", o:["Defense","Attack","Referee"], syn:["Attack"], n:"공격"},
-            {t:"aerodynamic", p:"/ˌeə.rəʊ.daɪˈnæm.ɪk/", m:"Shape that cuts wind", s:"An **aerodynamic** helmet.", e:"This car has an aerodynamic design for speed.", o:["Heavy","Wind-cutting","Square"], syn:["Streamlined"], n:"공기 저항을 최소화한 (유선형의)"},
-            {t:"accelerate", p:"/əkˈsel.ə.reɪt/", m:"Go faster", s:"Car began to **accelerate**.", e:"Accelerate when you see the open road.", o:["Slow down","Go faster","Stop"], syn:["Speed up"], n:"가속하다, 속도를 높이다"},
-            {t:"velocity", p:"/vəˈlɒs.ə.ti/", m:"Speed in a direction", s:"Measure the **velocity**.", e:"The velocity of his shot was incredible.", o:["Weight","Speed","Height"], syn:["Speed"], n:"속도 (방향성 포함)"},
-            {t:"dominant", p:"/ˈdɒm.ɪ.nənt/", m:"Strongest/Most important", s:"The **dominant** team.", e:"He is the dominant player in the league right now.", o:["Weak","Strongest","Average"], syn:["Leading"], n:"지배적인, 압도적인"},
-            {t:"hat-trick", p:"/ˈhæt.trɪk/", m:"Scoring three times", s:"He scored a **hat-trick**!", e:"A hat-trick in the final game is legendary.", o:["One goal","Three goals","Miss"], syn:["Triple"], n:"한 선수가 한 경기에서 3골 넣음"},
-            {t:"possession", p:"/pəˈzeʃ.ən/", m:"Control of the ball", s:"Keep **possession**.", e:"Barcelona is known for high possession football.", o:["Losing","Control","Kick"], syn:["Control"], n:"볼 점유율, 소유권"},
-            {t:"counterattack", p:"/ˈkaʊn.tər.ə.tæk/", m:"Attack after being attacked", s:"A fast **counterattack**.", e:"They scored on a brilliant counterattack.", o:["Defense","Fast attack","Slow play"], syn:["Breakaway"], n:"역습 (수비하다 빠르게 공격 전환)"},
-            {t:"equalizer", p:"/ˈiː.kwə.laɪ.zər/", m:"Goal that ties the game", s:"They scored an **equalizer**.", e:"The last-minute equalizer shocked the fans.", o:["Winning goal","Tying goal","Losing goal"], syn:["Tie-maker"], n:"동점골"},
-            {t:"foul", p:"/faʊl/", m:"Against the rules", s:"That was a bad **foul**.", e:"The referee blew the whistle for a foul.", o:["Fair play","Rule break","Goal"], syn:["Violation"], n:"반칙"},
-            {t:"endurance", p:"/ɪnˈdʒʊə.rəns/", m:"Ability to last long", s:"Cycling builds **endurance**.", e:"You need great endurance for a triathlon.", o:["Speed","Lasting power","Strength"], syn:["Stamina"], n:"오래 버티는 지구력"},
-            {t:"terrain", p:"/təˈreɪn/", m:"Type of land", s:"Rough **terrain**.", e:"Mountain bikes are built for tough terrain.", o:["Water","Land type","Sky"], syn:["Ground"], n:"지형 (오르막, 자갈길 등)"},
-            {t:"breakaway", p:"/ˈbreɪk.ə.weɪ/", m:"Sudden attack move", s:"A dangerous **breakaway**.", e:"The hockey player had a breakaway and scored.", o:["Defense","Sudden attack","Timeout"], syn:["Escape"], n:"단독 찬스 (수비를 뚫고 혼자 나감)"},
-            {t:"slap shot", p:"/ˈslæp.ʃɒt/", m:"Powerful hockey shot", s:"A booming **slap shot**.", e:"His slap shot is the fastest in the league.", o:["Slow pass","Powerful shot","Skating"], syn:["Hard shot"], n:"(하키) 스틱을 휘둘러 강하게 때리는 슛"},
+            
+            // [SECTION 3: Tech, Future & Society]
+            {t:"artificial", p:"/ˌɑː.tɪˈfɪʃ.əl/", m:"Man-made/Fake", s:"**Artificial** intelligence.", e:"This juice has artificial flavors.", o:["Natural","Man-made","Real"], syn:["Synthetic"], n:"인공의, 인조의"},
+            {t:"authentic", p:"/ɔːˈθen.tɪk/", m:"Real/Genuine", s:"**Authentic** pizza.", e:"Is this signature authentic?", o:["Fake","Real","Cheap"], syn:["Genuine"], n:"진짜의, 진품의 (짝퉁 아님)"},
+            {t:"innovation", p:"/ˌɪn.əˈveɪ.ʃən/", m:"New idea/method", s:"Tech **innovation**.", e:"The smartphone was a huge innovation.", o:["Old way","New idea","Copy"], syn:["Invention"], n:"혁신"},
+            {t:"virtual", p:"/ˈvɜː.tʃu.əl/", m:"Computer simulated", s:"**Virtual** reality.", e:"We met in a virtual chat room.", o:["Real","Digital","Old"], syn:["Simulated"], n:"가상의 (컴퓨터 속의)"},
+            {t:"glitch", p:"/ɡlɪtʃ/", m:"Technical error", s:"A computer **glitch**.", e:"The game crashed because of a glitch.", o:["Feature","Error","Button"], syn:["Bug"], n:"일시적인 오류, 버그"},
+            {t:"obsolete", p:"/ˈɒb.səl.iːt/", m:"Outdated/No longer used", s:"DVDs are **obsolete**.", e:"Typewriters are now obsolete.", o:["New","Outdated","Popular"], syn:["Archaic"], n:"너무 구식이라 사라진"},
+            {t:"resolution", p:"/ˌrez.əˈluː.ʃən/", m:"Screen quality", s:"High **resolution**.", e:"4K resolution is very clear.", o:["Sound","Clarity","Size"], syn:["Definition"], n:"해상도, 선명도"},
+            {t:"compatible", p:"/kəmˈpæt.ə.bəl/", m:"Works together", s:"Is it **compatible**?", e:"This software is not compatible with Mac.", o:["Broken","Matching","New"], syn:["Suitable"], n:"호환되는 (서로 맞는)"},
+            {t:"generate", p:"/ˈdʒen.ə.reɪt/", m:"Produce/Create", s:"**Generate** electricity.", e:"AI can generate images.", o:["Destroy","Create","Buy"], syn:["Produce"], n:"만들어내다, 발생시키다"},
+            {t:"privacy", p:"/ˈprɪv.ə.si/", m:"Being free from public attention", s:"Respect my **privacy**.", e:"Online privacy is important.", o:["Fame","Secrecy","Crowd"], syn:["Seclusion"], n:"사생활, 프라이버시"},
 
-            // [SECTION 4: Tech, Gaming & Modern Life]
-            {t:"glitch", p:"/ɡlɪtʃ/", m:"Small technical problem", s:"The game has a **glitch**.", e:"My phone screen had a weird glitch.", o:["Feature","Bug/Problem","Button"], syn:["Bug","Error"], n:"일시적인 기계 오류나 버그"},
-            {t:"lag", p:"/læɡ/", m:"Delay in response", s:"This server has bad **lag**.", e:"I missed the shot because of the lag.", o:["Speed","Delay","Sound"], syn:["Latency"], n:"(게임 등에서) 반응 속도가 느린 현상"},
-            {t:"virtual", p:"/ˈvɜː.tʃu.əl/", m:"Computer-generated (Not real)", s:"A **virtual** reality headset.", e:"We had a virtual meeting online.", o:["Real","Digital/Fake","Old"], syn:["Simulated"], n:"가상의 (컴퓨터 속의)"},
-            {t:"device", p:"/dɪˈvaɪs/", m:"Electronic machine/tool", s:"Charge your **device**.", e:"Tablets are useful learning devices.", o:["Toy","Electronic tool","Food"], syn:["Gadget"], n:"전자기기나 장치"},
-            {t:"innovative", p:"/ˈɪn.ə.və.tɪv/", m:"New and creative", s:"An **innovative** design.", e:"Steve Jobs was an innovative leader.", o:["Old","Creative/New","Boring"], syn:["Inventive"], n:"혁신적이고 기발한"},
-            {t:"obsolete", p:"/ˈɒb.səl.iːt/", m:"Old and not used anymore", s:"Floppy disks are **obsolete**.", e:"That old phone is now obsolete tech.", o:["New","Outdated","Popular"], syn:["Outdated"], n:"너무 구식이라 이제 안 쓰는"},
-            {t:"compatible", p:"/kəmˈpæt.ə.bəl/", m:"Working well together", s:"Is this software **compatible**?", e:"These two devices are not compatible.", o:["Broken","Working together","New"], syn:["Matching"], n:"호환되는 (서로 잘 맞는)"},
-            {t:"resolution", p:"/ˌrez.əˈluː.ʃən/", m:"Screen clarity/Quality", s:"High **resolution** screen.", e:"The game runs at 4K resolution.", o:["Sound","Screen quality","Size"], syn:["Clarity"], n:"(화면의) 해상도, 선명도"},
-            {t:"bandwidth", p:"/ˈbænd.wɪtθ/", m:"Data transfer capacity", s:"Low **bandwidth** causes lag.", e:"Streaming video uses a lot of bandwidth.", o:["Screen size","Data capacity","Battery"], syn:["Capacity"], n:"대역폭 (인터넷 데이터 처리 능력)"},
-            {t:"authentic", p:"/ɔːˈθen.tɪk/", m:"Real/Genuine", s:"**Authentic** Italian pizza.", e:"Is this jersey authentic or fake?", o:["Fake","Real","Cheap"], syn:["Genuine"], n:"진짜의, 진품의"},
-            {t:"alternative", p:"/ɒlˈtɜː.nə.tɪv/", m:"Another choice", s:"Find an **alternative** route.", e:"Is there a healthy alternative to soda?", o:["Same choice","Another choice","No choice"], syn:["Option"], n:"대안, 다른 선택지"},
-            {t:"essential", p:"/ɪˈsen.ʃəl/", m:"Completely necessary", s:"Water is **essential** for life.", e:"Good gear is essential for camping.", o:["Optional","Necessary","Useless"], syn:["Vital"], n:"없어서는 안 될 필수적인"},
-            {t:"relevant", p:"/ˈrel.ə.vənt/", m:"Related to the topic", s:"Is that **relevant**?", e:"Keep your comments relevant to the topic.", o:["Unrelated","Related","Funny"], syn:["Pertinent"], n:"관련이 있는, 적절한"},
-            {t:"imply", p:"/ɪmˈplaɪ/", m:"Suggest without saying", s:"Are you **implying** I'm lazy?", e:"His silence implied agreement.", o:["Say directly","Suggest indirectly","Shout"], syn:["Hint"], n:"넌지시 암시하다, 비추다"},
-            {t:"perspective", p:"/pəˈspek.tɪv/", m:"Point of view", s:"From my **perspective**...", e:"Try to see things from his perspective.", o:["Glasses","Point of view","Height"], syn:["Viewpoint"], n:"관점, 시각"},
-            {t:"assume", p:"/əˈsjuːm/", m:"Accept as true without proof", s:"Don't **assume** anything.", e:"I assumed you were coming to the party.", o:["Know","Guess/Believe","Deny"], syn:["Presume"], n:"(증거 없이) 당연히 그럴 거라 생각하다"},
-            {t:"contribute", p:"/kənˈtrɪb.juːt/", m:"Give something to help", s:"**Contribute** to the team.", e:"Everyone should contribute their ideas.", o:["Take","Give/Help","Stop"], syn:["Donate"], n:"기여하다, 이바지하다"},
-            {t:"emphasize", p:"/ˈem.fə.saɪz/", m:"Give importance to", s:"He **emphasized** the rule.", e:"The teacher emphasized studying for the test.", o:["Ignore","Highlight/Stress","Whisper"], syn:["Stress"], n:"강조하다"},
-            {t:"generate", p:"/ˈdʒen.ə.reɪt/", m:"Produce or create", s:"Solar panels **generate** power.", e:"This AI can generate images.", o:["Destroy","Create","Buy"], syn:["Produce"], n:"만들어내다, 발생시키다"},
-            {t:"monitor", p:"/ˈmɒn.ɪ.tər/", m:"Watch closely", s:"**Monitor** your progress.", e:"Doctors monitor the patient's heart rate.", o:["Ignore","Watch closely","Sleep"], syn:["Observe"], n:"주의 깊게 관찰/감시하다"},
-            {t:"potential", p:"/pəˈten.ʃəl/", m:"Possibility to develop", s:"She has great **potential**.", e:"This idea has the potential to change everything.", o:["Limit","Possibility","Past"], syn:["Possibility"], n:"잠재력, 가능성"},
-            {t:"sustain", p:"/səˈsteɪn/", m:"Keep something going", s:"Can you **sustain** this speed?", e:"We need food to sustain energy.", o:["Stop","Maintain/Keep","Break"], syn:["Maintain"], n:"지속하다, 유지하다"},
-            {t:"transform", p:"/trænsˈfɔːm/", m:"Change completely", s:"The caterpillar **transformed**.", e:"Technology has transformed our lives.", o:["Stay same","Change completely","Move"], syn:["Convert"], n:"완전히 다른 모습으로 변형시키다"},
-            {t:"verify", p:"/ˈver.ɪ.faɪ/", m:"Check if true", s:"Please **verify** your password.", e:"Scientists must verify their results.", o:["Guess","Check/Confirm","Lie"], syn:["Confirm"], n:"사실인지 확인(검증)하다"},
-            {t:"abstract", p:"/ˈæb.strækt/", m:"Based on ideas, not things", s:"**Abstract** art.", e:"Love and freedom are abstract concepts.", o:["Real","Idea-based","Simple"], syn:["Theoretical"], n:"추상적인 (눈에 안 보이는 개념)"}
-        ];
+             // [SECTION 4: Feelings & Personality]
+            {t:"empathy", p:"/ˈem.pə.θi/", m:"Feeling what others feel", s:"Show **empathy**.", e:"He has no empathy for others' pain.", o:["Anger","Understanding feelings","Hate"], syn:["Compassion"], n:"공감 능력"},
+            {t:"anxious", p:"/ˈæŋk.ʃəs/", m:"Worried/Nervous", s:"I feel **anxious**.", e:"She was anxious about the test results.", o:["Happy","Worried","Calm"], syn:["Nervous"], n:"불안해하는, 초조한"},
+            {t:"arrogant", p:"/ˈær.ə.ɡənt/", m:"Too proud", s:"Don't be **arrogant**.", e:"He is arrogant and thinks he is the best.", o:["Humble","Proud/Rude","Shy"], syn:["Conceited"], n:"거만한, 오만한"},
+            {t:"diligent", p:"/ˈdɪl.ɪ.dʒənt/", m:"Hard-working", s:"A **diligent** worker.", e:"Be diligent in your studies.", o:["Lazy","Hard-working","Fast"], syn:["Industrious"], n:"근면 성실한"},
+            {t:"integrity", p:"/ɪnˈteɡ.rə.ti/", m:"Honesty/Strong morals", s:"Man of **integrity**.", e:"Integrity means doing the right thing when no one is watching.", o:["Lying","Honesty","Fear"], syn:["Honesty"], n:"청렴, 정직함"},
+            {t:"optimistic", p:"/ˌɒp.tɪˈmɪs.tɪk/", m:"Positive about future", s:"Be **optimistic**.", e:"I am optimistic that we will win.", o:["Sad","Positive","Angry"], syn:["Hopeful"], n:"낙관적인"},
+            {t:"pessimistic", p:"/ˌpes.ɪˈmɪs.tɪk/", m:"Negative about future", s:"Don't be **pessimistic**.", e:"He is pessimistic and always expects rain.", o:["Happy","Negative","Fast"], syn:["Gloomy"], n:"비관적인, 염세적인"},
+            {t:"ambitious", p:"/æmˈbɪʃ.əs/", m:"Wanting success", s:"**Ambitious** goals.", e:"She is ambitious and wants to be president.", o:["Lazy","Driven","Quiet"], syn:["Aspiring"], n:"야망 있는"},
+            {t:"cautious", p:"/ˈkɔː.ʃəs/", m:"Careful", s:"Be **cautious**.", e:"He is cautious around dogs.", o:["Wild","Careful","Fast"], syn:["Wary"], n:"신중한, 조심성 있는"},
+            {t:"genuine", p:"/ˈdʒen.ju.ɪn/", m:"Real/Sincere", s:"A **genuine** smile.", e:"Is this leather genuine?", o:["Fake","Real","Expensive"], syn:["Authentic"], n:"진심 어린, 진짜의"},
+            
+            // [SECTION 5: Action & Abstract]
+            {t:"accelerate", p:"/əkˈsel.ə.reɪt/", m:"Go faster", s:"**Accelerate** the car.", e:"The growth accelerated this year.", o:["Stop","Speed up","Turn"], syn:["Hasten"], n:"가속하다"},
+            {t:"accumulate", p:"/əˈkjuː.mjə.leɪt/", m:"Gather/Collect", s:"Dust **accumulates**.", e:"He accumulated a lot of knowledge.", o:["Scatter","Collect","Spend"], syn:["Amass"], n:"축적하다, 모으다"},
+            {t:"adapt", p:"/əˈdæpt/", m:"Change to fit", s:"**Adapt** to new school.", e:"Animals adapt to their environment.", o:["Die","Adjust","Stay"], syn:["Adjust"], n:"적응하다"},
+            {t:"advocate", p:"/ˈæd.və.keɪt/", m:"Support publicly", s:"**Advocate** for rights.", e:"He advocates for animal protection.", o:["Fight","Support","Ignore"], syn:["Support"], n:"옹호하다, 지지하다"},
+            {t:"clarify", p:"/ˈklær.ɪ.faɪ/", m:"Make clear", s:"**Clarify** your point.", e:"Could you clarify what you mean?", o:["Confuse","Explain clearly","Hide"], syn:["Explain"], n:"명확하게 하다"},
+            {t:"coincide", p:"/ˌkəʊ.ɪnˈsaɪd/", m:"Happen same time", s:"Dates **coincide**.", e:"My birthday coincides with the holiday.", o:["Separate","Happen together","Stop"], syn:["Overlap"], n:"동시에 일어나다"},
+            {t:"contradict", p:"/ˌkɒn.trəˈdɪkt/", m:"Say opposite", s:"Don't **contradict** me.", e:"The facts contradict his story.", o:["Agree","Oppose","Help"], syn:["Deny"], n:"반박하다, 모순되다"},
+            {t:"coordinate", p:"/kəʊˈɔː.dɪ.neɪt/", m:"Organize together", s:"**Coordinate** the team.", e:"We need to coordinate our colors.", o:["Break","Organize","Sleep"], syn:["Manage"], n:"조정하다, 협력하다"},
+            {t:"demonstrate", p:"/ˈdem.ən.streɪt/", m:"Show clearly", s:"**Demonstrate** the skill.", e:"He demonstrated how to use the tool.", o:["Hide","Show","Guess"], syn:["Show"], n:"증명하다, 시범을 보이다"},
+            {t:"distribute", p:"/dɪˈstrɪb.juːt/", m:"Give out", s:"**Distribute** the papers.", e:"Food was distributed to the poor.", o:["Keep","Give/Share","Take"], syn:["Hand out"], n:"분배하다, 나누어 주다"},
+            {t:"dominate", p:"/ˈdɒm.ɪ.neɪt/", m:"Control/Rule", s:"**Dominate** the game.", e:"The team dominated the match.", o:["Lose","Control","Join"], syn:["Rule"], n:"지배하다, 압도하다"},
+            {t:"eliminate", p:"/iˈlɪm.ɪ.neɪt/", m:"Remove", s:"**Eliminate** wrong answers.", e:"We need to eliminate waste.", o:["Keep","Remove/Stop","Add"], syn:["Get rid of"], n:"제거하다, 없애다"},
+            {t:"guarantee", p:"/ˌɡær.ənˈtiː/", m:"Promise certainty", s:"I **guarantee** it.", e:"This product is guaranteed for 2 years.", o:["Hope","Promise","Lie"], syn:["Assure"], n:"보장하다, 장담하다"},
+            {t:"interfere", p:"/ˌɪn.təˈfɪər/", m:"Get involved unasked", s:"Don't **interfere**.", e:"Noise interferes with my study.", o:["Help","Meddle","Join"], syn:["Meddle"], n:"간섭하다, 방해하다"},
+            {t:"investigate", p:"/ɪnˈves.tɪ.ɡeɪt/", m:"Examine crime/problem", s:"**Investigate** the case.", e:"Police are investigating the theft.", o:["Ignore","Examine/Check","Run"], syn:["Inspect"], n:"수사하다, 조사하다"},
+            {t:"monitor", p:"/ˈmɒn.ɪ.tər/", m:"Watch/Check", s:"**Monitor** the screen.", e:"Monitor your heart rate.", o:["Sleep","Watch/Check","Break"], syn:["Observe"], n:"모니터링하다, 감시하다"},
+            {t:"occupy", p:"/ˈɒk.jə.paɪ/", m:"Fill space/time", s:"**Occupy** the seat.", e:"Video games occupy his free time.", o:["Empty","Fill/Use","Leave"], syn:["Inhabit"], n:"차지하다, 점령하다"},
+            {t:"predict", p:"/prɪˈdɪkt/", m:"Say future", s:"**Predict** the score.", e:"Can you predict the weather?", o:["Recall","Forecast","Ask"], syn:["Forecast"], n:"예측하다"},
+            {t:"publish", p:"/ˈpʌb.lɪʃ/", m:"Print/Release book", s:"**Publish** a book.", e:"The article was published yesterday.", o:["Read","Print/Release","Hide"], syn:["Release"], n:"출판하다, 발표하다"},
+            {t:"reinforce", p:"/ˌriː.ɪnˈfɔːs/", m:"Make stronger", s:"**Reinforce** the wall.", e:"Homework reinforces what you learned.", o:["Weaken","Strengthen","Break"], syn:["Strengthen"], n:"강화하다, 보강하다"},
+            {t:"restore", p:"/rɪˈstɔːr/", m:"Bring back", s:"**Restore** the file.", e:"Sleep restores energy.", o:["Delete","Bring back/Fix","Move"], syn:["Repair"], n:"복구하다, 되돌리다"},
+            {t:"revise", p:"/rɪˈvaɪz/", m:"Change/Improve", s:"**Revise** the essay.", e:"We need to revise our plans.", o:["Keep","Change/Edit","Trash"], syn:["Edit"], n:"수정하다, 개정하다"},
+            {t:"substitute", p:"/ˈsʌb.stɪ.tjuːt/", m:"Use instead", s:"**Substitute** teacher.", e:"You can substitute honey for sugar.", o:["Keep","Replace","Mix"], syn:["Replace"], n:"대체하다, 대신하다"},
+            {t:"sustain", p:"/səˈsteɪn/", m:"Maintain/Support", s:"**Sustain** the speed.", e:"Food sustains life.", o:["Stop","Keep going","Drop"], syn:["Maintain"], n:"지탱하다, 지속하다"},
+            {t:"transform", p:"/trænsˈfɔːm/", m:"Change form", s:"**Transform** the room.", e:"The caterpillar transformed into a butterfly.", o:["Stay","Change form","Move"], syn:["Convert"], n:"변형시키다"},
+            {t:"utilize", p:"/ˈjuː.təl.aɪz/", m:"Use effectively", s:"**Utilize** your skills.", e:"We utilize solar power.", o:["Waste","Use","Buy"], syn:["Use"], n:"활용하다 (Use보다 격식)"},
+// =======================================================
+    // ➕ [PART 2] Jay를 위한 추가 데이터 (Tier 2 & Idioms)
+    // 기존 데이터 맨 끝에 콤마(,) 찍고 그 뒤에 붙여넣으세요!
+    // =======================================================
+
+    // [ACADEMIC & CRITICAL THINKING - 에세이/토론용]
+    {t:"acknowledge", p:"/əkˈnɒl.ɪdʒ/", m:"Admit as true", s:"He **acknowledged** his mistake.", e:"The teacher acknowledged my hard work.", o:["Deny","Admit","Ignore"], syn:["Admit","Recognize"], n:"(사실을) 인정하다"},
+    {t:"acquire", p:"/əˈkwaɪər/", m:"Get/Gain", s:"**Acquire** new skills.", e:"He acquired a lot of knowledge about space.", o:["Lose","Get/Gain","Give"], syn:["Obtain"], n:"(노력해서) 습득하다, 얻다"},
+    {t:"adequate", p:"/ˈæd.ə.kwət/", m:"Enough/Good enough", s:"The food was **adequate**.", e:"Is your preparation adequate for the test?", o:["Insufficient","Enough","Bad"], syn:["Sufficient"], n:"(필요를 채울 만큼) 충분한, 적절한"},
+    {t:"adjust", p:"/əˈdʒʌst/", m:"Change slightly", s:"**Adjust** the volume.", e:"It took time to adjust to the new school.", o:["Break","Change a bit","Stop"], syn:["Adapt","Modify"], n:"(상황에 맞게) 조절하다, 적응하다"},
+    {t:"alter", p:"/ˈɒl.tər/", m:"Change", s:"Don't **alter** the plan.", e:"This dress needs to be altered to fit.", o:["Keep","Change","Make"], syn:["Change","Modify"], n:"바꾸다, 변경하다 (Change보다 격식)"},
+    {t:"anticipate", p:"/ænˈtɪs.ɪ.peɪt/", m:"Expect/Prepare", s:"I **anticipate** trouble.", e:"We anticipate a large crowd today.", o:["Doubt","Expect","Forget"], syn:["Expect","Predict"], n:"예상하다 (미리 대비하다)"},
+    {t:"apparent", p:"/əˈpær.ənt/", m:"Clearly seen", s:"It became **apparent**.", e:"His sadness was apparent to everyone.", o:["Hidden","Clear","Confusing"], syn:["Obvious"], n:"누가 봐도 분명한"},
+    {t:"aspect", p:"/ˈæs.pekt/", m:"Part/Feature", s:"Consider every **aspect**.", e:"What is your favorite aspect of this game?", o:["Whole","Part","End"], syn:["Feature"], n:"측면, 양상 (여러 면 중 하나)"},
+    {t:"capable", p:"/ˈkeɪ.pə.bəl/", m:"Able to do", s:"You are **capable**.", e:"He is capable of solving hard math problems.", o:["Weak","Able","Lazy"], syn:["Competent"], n:"~할 능력이 있는"},
+    {t:"capacity", p:"/kəˈpæs.ə.ti/", m:"Maximum amount", s:"Full **capacity**.", e:"The stadium is filled to capacity.", o:["Empty","Max amount","Minimum"], syn:["Volume"], n:"수용 능력, 용량"},
+    {t:"category", p:"/ˈkæt.ə.ɡri/", m:"Group of type", s:"Pick a **category**.", e:"Which category does this book belong to?", o:["One","Group/Type","Mess"], syn:["Class"], n:"범주, 카테고리"},
+    {t:"cease", p:"/siːs/", m:"Stop", s:"The rain **ceased**.", e:"The factory ceased operations.", o:["Start","Stop","Continue"], syn:["Stop","Halt"], n:"중단하다, 멈추다 (Stop보다 격식)"},
+    {t:"challenge", p:"/ˈtʃæl.ɪndʒ/", m:"Difficult task", s:"I accept the **challenge**.", e:"This level is a real challenge.", o:["Easy thing","Difficult task","Gift"], syn:["Test"], n:"도전, 난제"},
+    {t:"circumstance", p:"/ˈsɜː.kəm.stɑːns/", m:"Fact/Condition", s:"Under no **circumstance**.", e:"The circumstances of the accident are unknown.", o:["Lie","Situation","Person"], syn:["Situation"], n:"(주변) 상황, 환경"},
+    {t:"clarify", p:"/ˈklær.ɪ.faɪ/", m:"Make clear", s:"Please **clarify**.", e:"Could you clarify your last point?", o:["Confuse","Explain","Hide"], syn:["Explain"], n:"명확하게 해명하다"},
+    {t:"conflict", p:"/ˈkɒn.flɪkt/", m:"Disagreement/Fight", s:"Avoid **conflict**.", e:"There is a conflict between the two stories.", o:["Peace","Fight","Love"], syn:["Dispute"], n:"갈등, 충돌"},
+    {t:"consent", p:"/kənˈsent/", m:"Permission/Agreement", s:"Parental **consent**.", e:"You need consent to join the trip.", o:["Refusal","Permission","Silence"], syn:["Permission"], n:"동의, 허락"},
+    {t:"consult", p:"/kənˈsʌlt/", m:"Seek advice", s:"**Consult** a doctor.", e:"Consult the manual before using the machine.", o:["Ignore","Ask advice","Teach"], syn:["Ask"], n:"상담하다, 참고하다"},
+    {t:"decline", p:"/dɪˈklaɪn/", m:"Go down/Refuse", s:"Sales **declined**.", e:"He declined the invitation to the party.", o:["Go up","Go down/Refuse","Accept"], syn:["Decrease","Refuse"], n:"감소하다 또는 정중히 거절하다"},
+    {t:"detect", p:"/dɪˈtekt/", m:"Discover/Notice", s:"**Detect** a virus.", e:"The sensor detected smoke.", o:["Hide","Find/Notice","Make"], syn:["Discover"], n:"탐지하다, 찾아내다"},
+    {t:"diminish", p:"/dɪˈmɪn.ɪʃ/", m:"Become smaller", s:"Hope **diminished**.", e:"His influence diminished over time.", o:["Grow","Decrease","Stay"], syn:["Reduce"], n:"줄어들다, 약해지다"},
+    {t:"dispose", p:"/dɪˈspəʊz/", m:"Get rid of", s:"**Dispose** of trash.", e:"How do you dispose of batteries?", o:["Keep","Throw away","Buy"], syn:["Discard"], n:"처분하다, 폐기하다"},
+    {t:"distinction", p:"/dɪˈstɪŋk.ʃən/", m:"Difference", s:"Clear **distinction**.", e:"There is a distinction between bugs and insects.", o:["Sameness","Difference","Mix"], syn:["Difference"], n:"뚜렷한 차이, 구분"},
+    {t:"draft", p:"/drɑːft/", m:"Rough copy", s:"First **draft**.", e:"Write a draft before the final essay.", o:["Final","Rough copy","Book"], syn:["Outline"], n:"초안 (완성 전 단계)"},
+    {t:"enable", p:"/ɪˈneɪ.bəl/", m:"Make possible", s:"Money **enables** travel.", e:"This tool enables you to work faster.", o:["Stop","Make possible","Block"], syn:["Allow"], n:"~할 수 있게 하다"},
+    {t:"enforce", p:"/ɪnˈfɔːs/", m:"Make obey", s:"**Enforce** the law.", e:"The referee enforced the rules strictly.", o:["Break","Make obey","Ignore"], syn:["Impose"], n:"(법이나 규칙을) 집행하다, 강요하다"},
+    {t:"enhance", p:"/ɪnˈhɑːns/", m:"Improve", s:"**Enhance** the quality.", e:"Spices enhance the flavor of food.", o:["Worsen","Improve","Remove"], syn:["Improve","Boost"], n:"(질이나 가치를) 높이다, 향상시키다"},
+    {t:"ensure", p:"/ɪnˈʃɔːr/", m:"Make sure", s:"**Ensure** safety.", e:"Please ensure the door is locked.", o:["Forget","Make sure","Guess"], syn:["Guarantee"], n:"확실하게 하다, 보장하다"},
+    {t:"exclude", p:"/ɪkˈskluːd/", m:"Leave out", s:"Don't **exclude** him.", e:"The price excludes tax.", o:["Include","Leave out","Add"], syn:["Omit"], n:"배제하다, 포함시키지 않다"},
+    {t:"exposure", p:"/ɪkˈspəʊ.ʒər/", m:"Being shown/unprotected", s:"Sun **exposure**.", e:"Limit your exposure to blue light.", o:["Hiding","Showing/Contact","Cover"], syn:["Contact"], n:"노출 (접하게 되는 것)"},
+
+    // [IDIOMS & PHRASAL VERBS - 실생활용]
+    {t:"figure out", p:"/ˈfɪɡ.ər aʊt/", m:"Understand/Solve", s:"**Figure out** the puzzle.", e:"I can't figure out why it's not working.", o:["Draw","Solve","Drop"], syn:["Solve"], n:"알아내다, 해결하다"},
+    {t:"give in", p:"/ɡɪv ɪn/", m:"Surrender/Agree", s:"He finally **gave in**.", e:"My mom gave in and bought me the game.", o:["Fight","Surrender","Win"], syn:["Yield"], n:"(고집을 꺾고) 굴복하다, 들어주다"},
+    {t:"go over", p:"/ɡəʊ ˈəʊ.vər/", m:"Review/Check", s:"Let's **go over** the plan.", e:"We went over the details twice.", o:["Under","Review","Ignore"], syn:["Review"], n:"검토하다, 복습하다"},
+    {t:"keep up", p:"/kiːp ʌp/", m:"Move at same speed", s:"**Keep up** with me!", e:"It's hard to keep up with the news.", o:["Slow down","Stay same speed","Stop"], syn:["Maintain pace"], n:"뒤처지지 않고 따라가다"},
+    {t:"look up to", p:"/lʊk ʌp tuː/", m:"Respect/Admire", s:"I **look up to** my dad.", e:"Many kids look up to Son Heung-min.", o:["Look down","Respect","Ignore"], syn:["Admire"], n:"존경하다 (위로 올려다보다)"},
+    {t:"make up", p:"/meɪk ʌp/", m:"Invent/Forgive", s:"Don't **make up** stories.", e:"They argued but made up quickly.", o:["Destroy","Invent/Reconcile","Sleep"], syn:["Invent"], n:"지어내다 또는 화해하다"},
+    {t:"pass out", p:"/pɑːs aʊt/", m:"Faint", s:"He might **pass out**.", e:"It was so hot I almost passed out.", o:["Walk out","Faint","Wake up"], syn:["Faint"], n:"기절하다 (필름 끊기다)"},
+    {t:"put off", p:"/pʊt ɒf/", m:"Delay/Postpone", s:"Don't **put off** homework.", e:"The meeting was put off until Monday.", o:["Do now","Delay","Cancel"], syn:["Postpone"], n:"미루다, 연기하다"},
+    {t:"run into", p:"/rʌn ˈɪn.tuː/", m:"Meet by accident", s:"I **ran into** Tom.", e:"Guess who I ran into at the mall?", o:["Run away","Meet unexpectedly","Call"], syn:["Bump into"], n:"우연히 마주치다"},
+    {t:"show off", p:"/ʃəʊ ɒf/", m:"Try to impress", s:"Stop **showing off**.", e:"He likes to show off his new car.", o:["Hide","Boast","Help"], syn:["Boast"], n:"자랑하다, 으스대다"},
+    {t:"stand out", p:"/stænd aʊt/", m:"Be easy to see", s:"You really **stand out**.", e:"Her bright dress made her stand out.", o:["Hide","Be noticeable","Sit"], syn:["Be noticeable"], n:"눈에 띄다, 두드러지다"},
+    {t:"turn down", p:"/tɜːn daʊn/", m:"Refuse/Lower", s:"**Turn down** the music.", e:"He turned down the job offer.", o:["Accept","Refuse/Lower","Turn up"], syn:["Reject"], n:"거절하다 또는 소리를 줄이다"},
+    {t:"wear out", p:"/weər aʊt/", m:"Become unusable", s:"My shoes **wore out**.", e:"Playing too much will wear out the battery.", o:["Look new","Become old/broken","Fix"], syn:["Deteriorate"], n:"닳아서 못 쓰게 되다"},
+    {t:"work out", p:"/wɜːk aʊt/", m:"Exercise/Solve", s:"I **work out** daily.", e:"We need to work out a solution.", o:["Sleep","Exercise/Solve","Eat"], syn:["Exercise"], n:"운동하다 또는 해결하다"},
+    {t:"couch potato", p:"/kaʊtʃ pəˈteɪ.təʊ/", m:"Lazy person", s:"Don't be a **couch potato**.", e:"He sits watching TV all day like a couch potato.", o:["Athlete","Lazy person","Vegetable"], syn:["Slacker"], n:"소파에 붙어서 TV만 보는 게으름뱅이"},
+    {t:"cold feet", p:"/kəʊld fiːt/", m:"Fear before event", s:"He got **cold feet**.", e:"I got cold feet before the speech.", o:["Hot feet","Nervousness","Brave"], syn:["Nervousness"], n:"막상 하려니 겁이 나서 주저함"},
+    {t:"big deal", p:"/bɪɡ diːl/", m:"Important thing", s:"It's no **big deal**.", e:"Why are you making such a big deal out of it?", o:["Small thing","Important thing","Cheap"], syn:["Important"], n:"대수로운 일 (No big deal = 별거 아냐)"},
+    {t:"ring a bell", p:"/rɪŋ ə bel/", m:"Sound familiar", s:"That name **rings a bell**.", e:"His face rings a bell, but I forgot his name.", o:["Loud","Sounds familiar","Strange"], syn:["Seem familiar"], n:"어디서 들어본 것 같다 (기억이 날 듯 말 듯)"},
+    {t:"rule of thumb", p:"/ruːl əv θʌm/", m:"General rule", s:"A good **rule of thumb**.", e:"As a rule of thumb, drink 8 glasses of water.", o:["Law","General guide","Hand"], syn:["Guideline"], n:"경험에 의한 대략적인 법칙"},
+    {t:"spill the tea", p:"/spɪl ðə tiː/", m:"Gossip", s:"Come on, **spill the tea**!", e:"She spilled the tea about the breakup.", o:["Drink","Gossip","Clean"], syn:["Gossip"], n:"썰 좀 풀어봐 (비밀 얘기해줘)"},
+
+    // [SPORTS & GAMING - Jay 맞춤형]
+    {t:"assist", p:"/əˈsɪst/", m:"Help score", s:"Great **assist**!", e:"He made a perfect pass for the assist.", o:["Goal","Help score","Block"], syn:["Help"], n:"(득점을) 돕다, 어시스트"},
+    {t:"rebound", p:"/ˈriː.baʊnd/", m:"Catch missed shot", s:"Grab the **rebound**.", e:"Rodman was famous for his rebounds.", o:["Score","Catch miss","Pass"], syn:["Recovery"], n:"리바운드 (튕겨 나온 공 잡기)"},
+    {t:"timeout", p:"/ˈtaɪm.aʊt/", m:"Short break", s:"Call a **timeout**.", e:"The coach called a timeout to change tactics.", o:["Game over","Short break","Start"], syn:["Break"], n:"타임아웃, 작전 타임"},
+    {t:"overtime", p:"/ˈəʊ.və.taɪm/", m:"Extra time", s:"Game went to **overtime**.", e:"They won the match in overtime.", o:["Half time","Extra time","End"], syn:["Extra period"], n:"연장전"},
+    {t:"underdog", p:"/ˈʌn.də.dɒɡ/", m:"Expected to lose", s:"Cheer for the **underdog**.", e:"The underdog team beat the champions.", o:["Winner","Weak team","Dog"], syn:["Long shot"], n:"이길 확률이 적은 약팀"},
+    {t:"MVP", p:"/ˌem.viːˈpiː/", m:"Most Valuable Player", s:"He was the **MVP**.", e:"Sonny was voted MVP of the match.", o:["Worst player","Best player","Coach"], syn:["Best player"], n:"최우수 선수"},
+    {t:"respawn", p:"/riːˈspɔːn/", m:"Reappear in game", s:"Wait to **respawn**.", e:"It takes 10 seconds to respawn after dying.", o:["Die","Reappear","Quit"], syn:["Revive"], n:"(게임에서 죽은 뒤) 다시 부활하다"},
+    {t:"campaign", p:"/kæmˈpeɪn/", m:"Story mode", s:"Play the **campaign**.", e:"The single-player campaign is awesome.", o:["Multiplayer","Story mode","Menu"], syn:["Story"], n:"(게임의) 스토리 모드"},
+    {t:"buff", p:"/bʌf/", m:"Increase power", s:"This weapon got a **buff**.", e:"The latest update buffed the wizard class.", o:["Weaken","Strengthen","Delete"], syn:["Boost"], n:"능력치를 상향시키다 (너프의 반대)"},
+    {t:"nerf", p:"/nɜːf/", m:"Decrease power", s:"They **nerfed** my character.", e:"That gun was too strong, so they nerfed it.", o:["Strengthen","Weaken","Fix"], syn:["Downgrade"], n:"능력치를 하향시키다 (너무 세서 약하게 만듦)"}        ];
 
         // =================================================================
-        // ⚙️ SYSTEM LOGIC (Fast & Light)
+        // ⚙️ APP LOGIC (Retry Feature Added)
         // =================================================================
         let vocabList = [...rawData];
+        // Start shuffled
         vocabList.sort(() => Math.random() - 0.5);
 
         let idx = 0;
         const cardArea = document.getElementById('cardArea');
         const progress = document.getElementById('progress');
         const hint = document.getElementById('hint');
+        let isAnswered = false; // To track if correct answer was found
 
         function render() {
             if (idx >= vocabList.length) {
+                // Loop infinitely
                 vocabList.sort(() => Math.random() - 0.5);
                 idx = 0;
             }
 
+            isAnswered = false;
             const item = vocabList[idx];
             
+            // Highlight target word in sentence
             const sentenceHTML = item.s.replace(`**${item.t}**`, `<span class='highlight'>${item.t}</span>`);
             
+            // Randomize options
             let options = item.o.map(opt => ({ txt: opt, isCor: opt === item.m }));
             options.sort(() => Math.random() - 0.5);
 
             const el = document.createElement('div');
             el.className = 'card';
-            // No Image Container -> Just Content
             el.innerHTML = `
                 <div class="word-header">
                     <div class="word-info">
@@ -288,16 +366,12 @@
 
                 <div class="details" id="details">
                     <div class="extra-context">
-                        <span class="ctx-label">ANOTHER EXAMPLE</span>
+                        <span class="ctx-label">CONTEXT</span>
                         <div class="ctx-text">"${item.e}"</div>
                     </div>
                     
-                    <div class="tag-block">
-                        <span class="ctx-label">NUANCE</span>
-                        <div class="tag t-nuance">${item.n}</div>
-                    </div>
-
                     <div class="tags">
+                        <span class="tag t-nuance">${item.n}</span>
                         ${item.syn.map(s => `<div class="tag t-syn">${s}</div>`).join('')}
                     </div>
                 </div>
@@ -316,46 +390,55 @@
             window.speechSynthesis.speak(u);
         };
 
+        // Updated Check Function: Allows Retrying
         window.check = (btn, isCorrect) => {
-            const allBtns = document.querySelectorAll('.option');
-            allBtns.forEach(b => b.onclick = null);
+            if (isAnswered) return; // Prevent clicking after correct answer
 
             if (isCorrect) {
-                btn.classList.add('correct');
-            } else {
-                btn.classList.add('wrong');
-                allBtns.forEach(b => {
-                    if (b.innerText === vocabList[idx].m) b.classList.add('correct');
+                // Correct!
+                btn.className = 'option correct';
+                isAnswered = true;
+                
+                // Disable all options visually
+                document.querySelectorAll('.option').forEach(b => {
+                    b.style.pointerEvents = 'none';
+                    if(!b.classList.contains('correct')) b.style.opacity = '0.6';
                 });
-            }
-            
-            const details = document.getElementById('details');
-            details.style.display = 'block';
-            
-            // Read full sentence
-            const sentenceText = vocabList[idx].s.replace(/\*\*/g, "");
-            setTimeout(() => speak(sentenceText), 200);
 
-            // Smooth Scroll to bottom
-            setTimeout(() => {
-                const card = document.querySelector('.card');
-                // Check if card needs scrolling
-                if(card.scrollHeight > card.clientHeight) {
-                     card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
-                }
-                hint.style.opacity = 1;
-            }, 100);
+                const details = document.getElementById('details');
+                details.style.display = 'block';
+                
+                // Read sentence
+                const sentenceText = vocabList[idx].s.replace(/\*\*/g, "");
+                setTimeout(() => speak(sentenceText), 200);
+
+                // Auto Scroll
+                setTimeout(() => {
+                    const card = document.querySelector('.card');
+                    if(card.scrollHeight > card.clientHeight) {
+                        card.scrollTo({ top: card.scrollHeight, behavior: 'smooth' });
+                    }
+                    hint.style.opacity = 1;
+                }, 100);
+
+            } else {
+                // Wrong!
+                btn.className = 'option wrong';
+                // Do NOT disable other buttons. Let user try again.
+                // Optional: Vibrate if on mobile
+                if(navigator.vibrate) navigator.vibrate(200);
+            }
         };
 
+        // Swipe Logic
         let startX = 0; let endX = 0;
         document.addEventListener('touchstart', e => startX = e.changedTouches[0].screenX);
         document.addEventListener('touchend', e => {
             endX = e.changedTouches[0].screenX;
-            const details = document.getElementById('details');
-            // Swipe works only if details are shown
-            if (details && details.style.display === 'block' && startX - endX > 50) {
+            // Only allow swipe if correctly answered
+            if (isAnswered && startX - endX > 50) {
                 const card = document.querySelector('.card');
-                card.style.transform = 'translateX(-120%) rotate(-3deg)';
+                card.style.transform = 'translateX(-120%)';
                 card.style.opacity = '0';
                 setTimeout(() => { idx++; render(); }, 250);
             }
